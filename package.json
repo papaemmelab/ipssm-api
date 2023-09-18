@@ -1,0 +1,32 @@
+{
+  "name": "ipssm",
+  "version": "1.0.0",
+  "description": "Javascript Package for the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papaemmelab/ipssm-js.git"
+  },
+  "keywords": [
+    "ipssm",
+    "mds",
+    "javascript",
+    "api"
+  ],
+  "author": "Juan E. Arango Ossa, Elsa Bernard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/papaemmelab/ipssm-js/issues"
+  },
+  "homepage": "https://github.com/papaemmelab/ipssm-js#readme",
+  "devDependencies": {
+    "vitest": "^0.34.4"
+  }
+}
