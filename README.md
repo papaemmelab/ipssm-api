@@ -22,7 +22,7 @@ npm install ipssm
 Having a patient's data in a CSV file, the following code will compute the IPSS-M and IPSS-M Risks.
 
 ```js
-const { ipssm } from ipssm'
+const { ipssm } from 'ipssm'
 
 // Add patient data to an object with the following fields
 
