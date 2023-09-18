@@ -28,4 +28,7 @@ const assertScores = ({ expected, computed, ID, type, precision = 0.001 }) => {
   console.log('✅ ' + msg)
 }
 
-export { categoryMapR, categoryMapM, assertScores }
+const round = (value, digits = 4) =>
+  Math.round(value * 10 ** digits) / 10 ** digits
+
+export { round, categoryMapR, categoryMapM, assertScores }

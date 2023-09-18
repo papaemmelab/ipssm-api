@@ -1,9 +1,9 @@
 import { it, describe } from 'vitest'
 import { promises as fs } from 'fs'
-import { round } from '../utils/general.js'
-import { assertScores, categoryMapR, categoryMapM } from './utils.js'
+import { assertScores, categoryMapR, categoryMapM, round } from './testUtils.js'
 
 import { ipssm, ipssr } from 'ipssm'
+
 
 describe('Risk Calculations', () => {
   describe('Load test dataset', () => {
