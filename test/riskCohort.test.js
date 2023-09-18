@@ -48,9 +48,6 @@ describe('Risk Calculations', () => {
           age: patientFields.AGE,
         })
 
-        // console.log('IPSSR', ipssrResult)
-        // console.log('Inputs', patientFields)
-
         assertScores({
           type: 'IPPS-R',
           expected: {
