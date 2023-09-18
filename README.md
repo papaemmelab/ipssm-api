@@ -92,17 +92,17 @@ console.log(ipssmResult)
 {
   means: {
     riskScore: 0.09,
-    riskCat: 'MH',
+    riskCat: 'Moderate High',
     contributions: {...}
   },
   best: {
     riskScore: 0.09,
-    riskCat: 'MH',
+    riskCat: 'Moderate High',
     contributions: {...}
   },
   worst: {
     riskScore: 0.09,
-    riskCat: 'MH',
+    riskCat: 'Moderate High',
     contributions: {...}
   },
 }
@@ -127,12 +127,12 @@ patientFields = {
 }
 
 const ipssrResult = ipssr({
-    hb: patientFields.HB,
-    anc: patientFields.ANC,
-    plt: patientFields.PLT,
-    bmblast: patientFields.BM_BLAST,
-    cytovec: patientFields.CYTOVEC,
-    age: patientFields.AGE,
+  hb: patientFields.HB,
+  anc: patientFields.ANC,
+  plt: patientFields.PLT,
+  bmblast: patientFields.BM_BLAST,
+  cytovec: patientFields.CYTOVEC,
+  age: patientFields.AGE,
 })
 
 console.log(ipssrResult)
@@ -144,18 +144,11 @@ Which outputs a risk score (means), with a best and worst scenario risk score to
 // Result
 {
     IPSSR_SCORE: 2.5,
-    IPSSR: 'LOW',
+    IPSSR: 'Low',
     IPSSRA_SCORE: 2.2563,
-    IPSSRA: 'LOW'
+    IPSSRA: 'Low',
 }
 ```
-
-  IPSSR_SCORE: 2.5,
-  IPSSR: 'Low',
-  IPSSRA_SCORE: 2.25625,
-  IPSSRA: 'Low',
-  IPSSM_SCORE: 0.09,
-  IPSSM: 'Moderate High',
 
 Alternatively the above steps can be performed with a one-line code using a wrapper function, as follows.
 

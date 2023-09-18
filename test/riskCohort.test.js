@@ -52,7 +52,7 @@ describe('Risk Calculations', () => {
           type: 'IPPS-R',
           expected: {
             score: round(IPSSR_SCORE),
-            category: categoryMapR[IPSSR],
+            category: IPSSR,
           },
           computed: {
             score: ipssrResult.IPSSR_SCORE,
@@ -65,7 +65,7 @@ describe('Risk Calculations', () => {
           type: 'IPPS-RA',
           expected: {
             score: round(IPSSRA_SCORE),
-            category: categoryMapR[IPSSRA],
+            category: IPSSRA,
           },
           computed: {
             score: ipssrResult.IPSSRA_SCORE,
@@ -80,7 +80,7 @@ describe('Risk Calculations', () => {
           type: 'IPPS-M',
           expected: {
             score: round(IPSSM_SCORE),
-            category: categoryMapM[IPSSM],
+            category: IPSSM,
           },
           computed: {
             score: ipssmResult.means.riskScore,

@@ -1,6 +1,23 @@
 import betas from './betasRiskScore.js'
 import { round } from './general.js'
 
+
+const ipssrCat = [
+  'Very Low',
+  'Low',
+  'Int',
+  'High',
+  'Very High',
+]
+const ipssmCat = [
+  'Very Low',
+  'Low', 
+  'Moderate Low', 
+  'Moderate High', 
+  'High', 
+  'Very High', 
+]
+
 // Utility to find value between intervals, and map interval number to value
 const cutBreak = (value, breaks, mapping, right = true) => {
   for (let i = 1; i < breaks.length; i++) {
@@ -81,8 +98,6 @@ const computeIpssr = (
 
   // build categories
   const ipssrgBreaks = [-Infinity, 1.5, 3, 4.5, 6, Infinity]
-  // const ipssrCat = ['Very Low', 'Low', 'Int', 'High', 'Very High']
-  const ipssrCat = ['VERY-LOW', 'LOW', 'INT', 'HIGH', 'VERY-HIGH']
   const ipssr = cutBreak(ipssrRaw, ipssrgBreaks, ipssrCat)
 
   let ipssraRaw = null
@@ -117,6 +132,7 @@ const computeIpssr = (
  *
  * @return {Object} dictionary of ipssm: score, category and contribution of each var.
  */
+
 const computeIpssm = (
   patientValues,
   rounding = true,
@@ -152,7 +168,6 @@ const computeIpssm = (
     }
 
     // risk categories
-    const ipssmCat = ['VL', 'L', 'ML', 'MH', 'H', 'VH']
     const riskCat = cutBreak(
       riskScore,
       [-Infinity, ...cutpoints, Infinity],
