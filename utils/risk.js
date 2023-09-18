@@ -42,16 +42,23 @@ const cutBreak = (value, breaks, mapping, right = true) => {
  * @param {number} plt - platelet, in giga per liter
  * @param {number} bmblast - bone marrow blasts, in %
  * @param {number} cytovec - cytogenetic category in numerical form
+ * @param {number} cytoIpssr - cytogenetic category in categorical form
  * @param {number} [age] - Age, in years
  *
  * @return {Object} dictionary of ipssr and ipssr-age adjusted, score and category.
  */
 const computeIpssr = (
-  { hb, anc, plt, bmblast, cytovec, age },
+  { hb, anc, plt, bmblast, cytovec, cytoIpssr, age },
   rounding = true,
   roundingDigits = 4
 ) => {
   // build category and score
+  const cytovecMap = {'Very Good': 0, 'Good': 1, 'Intermediate': 2, 'Poor': 3, 'Very Poor': 4}
+
+  if (!cytovec && cytoIpssr) {
+    cytovec = cytovecMap[cytoIpssr]
+  }
+
   const hbri = cutBreak(
     hb,
     [-Infinity, 8, 10, Infinity],

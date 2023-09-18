@@ -1,12 +1,12 @@
 {
   "name": "ipssm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Javascript Package for the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },
-  "type": "module",
   "scripts": {
     "test": "vitest"
   },

@@ -26,4 +26,11 @@ const italicizeGeneNames = (string) => {
   return italicized
 }
 
-export { range, round, italicizeGeneNames }
+const toString = (value) => {
+  if (value === null || value === undefined) {
+    return 'NA'
+  }
+  return value
+}
+
+export { range, round, italicizeGeneNames, toString }

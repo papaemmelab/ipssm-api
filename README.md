@@ -30,19 +30,21 @@ Having a patient's data in a CSV file, the following code will compute the IPSS-
 const { ipssm } from 'ipssm'
 
 // Add patient data to an object with the following fields
-
-const patientgFields = {
-  HB: 8.2,
-  ANC: 0.72,
-  PLT: 239,
+const patientFields = {
+  // Clinical Data
   BM_BLAST: 0,
-  CYTOVEC: 1,
+  HB: 8.2,
+  PLT: 239,
+  // Optional IPSS-R fields
+  ANC: 0.72,
   AGE: 63.5,
+  // Cytogenetic Data 
   del5q: 0,
   del7_7q: 0,
   del17_17p: 0,
-  complex: 0,
+  complex: 0, 
   CYTO_IPSSR: 'Good',
+  // Molecular Data
   TP53mut: 0,
   TP53maxvaf: 0,
   TP53loh: 0,
@@ -76,11 +78,6 @@ const patientgFields = {
   SETBP1: 0,
   STAG2: 0,
   WT1: 0,
-  SF3B1_5q: 0,
-  SF3B1_alpha: 0,
-  TP53multi: 0,
-  HB1: 8.2,
-  BLAST5: 0,
 }
 
 const ipssmResult = ipssm(patientFields)
@@ -150,7 +147,18 @@ Which outputs a risk score (means), with a best and worst scenario risk score to
 }
 ```
 
-Alternatively the above steps can be performed with a one-line code using a wrapper function, as follows.
+### Annotating CSV/Excel
+
+The following code will annotate a CSV file with the IPSS-M and IPSS-M Risks.
+
+```js
+import { annotateFile } from 'ipssm'
+
+const inputFile = './test/data/IPSSMexample.csv'
+const outputFile = 'IPSSMexample.annotated.csv'
+
+annotateFile(inputFile, outputFile)
+```
 
 ## :page_with_curl: Reference
 
@@ -158,4 +166,4 @@ Alternatively the above steps can be performed with a one-line code using a wrap
 
 ## :question: Question
 
-Any questions feel free to add an [issue](https://github.com/ipssm-js/issues) to this repo or to contact [ElsaB](https://elsab.github.io/).
+Any questions feel free to add an [issue](https://github.com/papaemmelab/ipssm-js/issues) to this repo or to contact [ElsaB](https://elsab.github.io/).
