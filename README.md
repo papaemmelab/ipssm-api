@@ -17,8 +17,6 @@ Javascript/Node Package for the Molecular International Prognostic Scoring Syste
 npm install ipssm
 ```
 
-# TODO: Replace all of this
-
 ## :boom: IPSS-M Usage
 
 Having a patient's data in a CSV file, the following code will compute the IPSS-M and IPSS-M Risks.
