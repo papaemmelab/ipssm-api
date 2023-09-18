@@ -1,5 +1,10 @@
 <!-- badges: start -->
 [![Compute IPSS-M and IPSS-M Risks on IWG-PM Cohort (Bernard et al, 2022 NJEM Evid)](https://github.com/papaemmelab/ipssm-js/actions/workflows/risk-scores-test.yml/badge.svg)](https://github.com/papaemmelab/ipssm-js/actions/workflows/risk-scores-test.yml)
+
+
+[![npm version](https://badge.fury.io/js/ipssm.svg)](https://badge.fury.io/js/ipssm)
+[![npm badge](https://data.jsdelivr.com/v1/package/npm/ipssm/badge)](https://www.jsdelivr.com/package/npm/ipssm)
+
 <!-- badges: end -->
 
 # ipssm (js)
