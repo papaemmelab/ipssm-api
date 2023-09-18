@@ -2,7 +2,7 @@ import { it, describe } from 'vitest'
 import { promises as fs } from 'fs'
 import { assertScores, categoryMapR, categoryMapM, round } from './testUtils.js'
 
-import { ipssm, ipssr } from 'ipssm'
+import { ipssm, ipssr } from '../index.js'
 
 
 describe('Risk Calculations', () => {
