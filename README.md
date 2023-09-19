@@ -157,7 +157,7 @@ import { annotateFile } from 'ipssm'
 const inputFile = './test/data/IPSSMexample.csv'
 const outputFile = 'IPSSMexample.annotated.csv'
 
-annotateFile(inputFile, outputFile)
+await annotateFile(inputFile, outputFile)
 ```
 
 ### 🗒️ Input Variables Definition
