@@ -24,8 +24,10 @@ Javascript/Node Package for the Molecular International Prognostic Scoring Syste
   - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
   - [🎯 Annotating batch from CSV/Excel file](#dart-annotating-batch-from-csvexcel-file)
   - [🦾 Using the command line interface](#mechanical_arm-using-the-command-line-interface)
-- [🗒️ Input Variables Definition](#spiral_note_pad-input-variables-definition)
+- [🗒️ Input Variables Definition](#spiral_notepad-input-variables-definition)
 - [❓ Question](#question-question)
+
+[inputs](#inputs)
 
 ## :page_with_curl: IPSS-M Publication
 
@@ -42,6 +44,7 @@ npm install ipssm
 ## :boom: IPSS-M Usage
 
 ### :fire: Compute IPSS-M
+
 Having a patient's data in a dictionary, you can compute the IPSS-M.
 
 ```js
@@ -210,7 +213,12 @@ Options:
   -h, --help     Show help                                             [boolean]
 ```
 
-## :spiral_note_pad: Input Variables Definition
+<!-- Anchor to target cli help -->
+<span id="inputs" />
+
+## :spiral_notepad: Input Variables Definition
+
+
 
 | Category                   | Variable Explanation          | Variable     | Unit                         | Possible Value                                              |
 |----------------------------|-------------------------------|--------------|------------------------------|-------------------------------------------------------------|
