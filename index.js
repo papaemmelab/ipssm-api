@@ -66,7 +66,7 @@ const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
   } else if (outputFile.endsWith('.xlsx')) {
     await writeXlsx(outputFile, annotatedPatients)
   } else {
-    throw new Error(`Output File type not supported (only .csv, .tsv, .xlsx))`)
+    throw new Error(`Output File type not supported (only .csv, .tsv, .xlsx)`)
   }
   console.log(`✅ Annotated file written to: ${outputFile}`)
 }

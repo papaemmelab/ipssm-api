@@ -1,27 +1,36 @@
-import Excel from 'exceljs'
+#!/usr/bin/env node
 
-const getDataFromExcelFile = async fileName => {
-    const workbook = new Excel.Workbook()
-    await workbook.xlsx.readFile(fileName).then(() => {
-        let data = []
-        workbook.eachSheet((worksheet) => {
-            let headers = {}
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { annotateFile } from '../index.js'
 
-            for (let i=1; i <= workbook.actualColumnCount; i++) {
-                headers[i] = worksheet.getRow(1).getCell(i).value
-            }
-            for (let x=2; x <= workbook.actualRowCount; x++) {
-                let row = {}
-                for (let y=1; x <= workbook.actualColumnCount; x++) {
-                    row[headers[y]] = worksheet.getRow(x).getCell(y).value
-                }
-                data.push(row)
-            }
+const argv = yargs(hideBin(process.argv))
+  .usage('Usage: $0 <inputFile> <outputFile>')
+  .command(
+    '$0 <inputFile> <outputFile>', 
+    'Annotate with IPSS-M and IPSS-R a file with patients.', 
+    (yargs) => {
+      yargs
+        .positional('inputFile', {
+          describe: 'File to be annotated (rows: patients, columns: variables).',
+          type: 'string'
         })
-    }).catch(err => {
-        console.err(err.message)
-        throw err
-    })
-}
+        .positional('outputFile', {
+          describe: 'Path for the annotated output file.',
+          type: 'string'
+        })
+  })
+  .demandCommand(2, 'You need to provide an inputFile and an outputFile.')
+  .epilogue(`Annotate a file of patients with IPSS-M and IPSS-R risk scores and categories. It supports .csv, .tsv, .xlsx files.`)
+  .help('h')
+  .alias('h', 'help')
+  .argv
 
-getDataFromExcelFile('test/data/IPSSMexample.xlsx')
+(async () => {
+  try {
+    await annotateFile(argv.inputFile, argv.outputFile)
+    console.log('File annotated successfully.')
+  } catch (error) {
+    console.error('Error annotating file:', error.message)
+  }
+})()

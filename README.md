@@ -15,6 +15,23 @@ Javascript/Node Package for the Molecular International Prognostic Scoring Syste
 
 - For the Online Web Calculator, visit [https://mds-risk-model.com](https://mds-risk-model.com).
 
+## Table of contents
+
+- [📖 IPSS-M Publication](#page_with_curl-ipss-m-publication)
+- [🚀 Installation instructions](#rocket-installation-instructions)
+- [💥 IPSS-M Usage](#boom-ipss-m-usage)
+  - [🔥 Compute IPSS-M](#fire-compute-ipss-m)
+  - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
+  - [🎯 Annotating batch from CSV/Excel file](#dart-annotating-batch-from-csvexcel-file)
+  - [🦾 Using the command line interface](#mechanical_arm-using-the-command-line-interface)
+- [🗒️ Input Variables Definition](#spiral_note_pad-input-variables-definition)
+- [❓ Question](#question-question)
+
+## :page_with_curl: IPSS-M Publication
+
+[Bernard E, Tuechler H, Greenberg PL, Hasserjian RP, Arango Ossa JE et al. **Molecular International Prognostic Scoring System for Myelodysplastic Syndromes**, *NEJM Evidence* 2022.](https://evidence.nejm.org/doi/full/10.1056/EVIDoa2200008)
+
+
 ## :rocket: Installation instructions
 
 ```bash
@@ -24,7 +41,8 @@ npm install ipssm
 
 ## :boom: IPSS-M Usage
 
-Having a patient's data in a CSV file, the following code will compute the IPSS-M and IPSS-M Risks.
+### :fire: Compute IPSS-M
+Having a patient's data in a dictionary, you can compute the IPSS-M.
 
 ```js
 const { ipssm } from 'ipssm'
@@ -147,7 +165,7 @@ Which outputs a risk score (means), with a best and worst scenario risk score to
 }
 ```
 
-### 🎯 Annotating batch from CSV/Excel file
+### :dart: Annotating batch from CSV/Excel file
 
 The following code will annotate a CSV file with the IPSS-M and IPSS-M Risks.
 
@@ -171,7 +189,28 @@ const outputFile = 'IPSSMexample.annotated.xlsx'
 await annotateFile(inputFile, outputFile)
 ```
 
-### 🗒️ Input Variables Definition
+### :mechanical_arm: Using the command line interface
+
+You can use the command line interface to annotate a file with patients, where each row is a patient and each column is a variable.
+
+```text
+$  ipssm --help
+
+Annotate a file of patients with IPSS-M and IPSS-R risk scores and categories.
+It supports .csv, .tsv, .xlsx files.
+
+Usage: ipssm <inputFile> <outputFile>
+
+Positionals:
+  inputFile   File to be annotated (rows: patients, columns: variables).[string]
+  outputFile  Path for the annotated output file.                       [string]
+
+Options:
+      --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
+```
+
+## :spiral_note_pad: Input Variables Definition
 
 | Category                   | Variable Explanation          | Variable     | Unit                         | Possible Value                                              |
 |----------------------------|-------------------------------|--------------|------------------------------|-------------------------------------------------------------|
@@ -218,11 +257,6 @@ await annotateFile(inputFile, outputFile)
 | gene residual              |                               | `SETBP1`     | binary                       | `0`/`1`/`NA`                                                    |
 | gene residual              |                               | `STAG2`      | binary                       | `0`/`1`/`NA`                                                    |
 | gene residual              |                               | `WT1`        | binary                       | `0`/`1`/`NA`                                                    |
-
-
-## :page_with_curl: Reference
-
-[Bernard E, Tuechler H, Greenberg PL, Hasserjian RP, Arango Ossa JE et al. **Molecular International Prognostic Scoring System for Myelodysplastic Syndromes**, *NEJM Evidence* 2022.](https://evidence.nejm.org/doi/full/10.1056/EVIDoa2200008)
 
 ## :question: Question
 

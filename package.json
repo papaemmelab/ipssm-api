@@ -1,6 +1,6 @@
 {
   "name": "ipssm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Javascript Package for the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.",
   "main": "index.js",
   "type": "module",
@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "exceljs": "^4.3.0",
-    "papaparse": "^5.4.1"
+    "papaparse": "^5.4.1",
+    "yargs": "^17.7.2"
   }
 }
