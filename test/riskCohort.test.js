@@ -1,8 +1,8 @@
 import { it, describe, expect } from 'vitest'
-import fs, { promises as asyncFs } from 'fs'
+import fs from 'fs'
 import { assertScores, round, assertExpectedResults } from './testUtils.js'
 import { ipssm, ipssr, annotateFile } from '../index.js'
-import { parseCsv } from '../utils/parseFile.js'
+import { parseCsv, parseXlsx } from '../utils/parseFile.js'
 
 
 describe('Risk Calculations', () => {
@@ -80,6 +80,36 @@ describe('Risk Calculations', () => {
   })
 
   it('Computes scores from a xlsx file', async () => {
+    const inputFile = './test/data/IPSSMexample.xlsx'
+    const outputFile = './test/data/IPSSMexample-out.xlsx'
+
+    if (fs.existsSync(outputFile)) {
+      fs.unlinkSync(outputFile)
+    }
+    await annotateFile(inputFile, outputFile)
+
+    // Read output file and assert expected results
+    expect(fs.existsSync(outputFile), `File doesn't exist: ${outputFile} `).toBe(true)
+    const patients = await parseXlsx(outputFile)
+    patients.forEach((patient) => assertExpectedResults(patient))
+  })
+
+  it('Computes scores from a csv and ouputs a xlsx file', async () => {
+    const inputFile = './test/data/IPSSMexample.csv'
+    const outputFile = './test/data/IPSSMexample-out.xlsx'
+
+    if (fs.existsSync(outputFile)) {
+      fs.unlinkSync(outputFile)
+    }
+    await annotateFile(inputFile, outputFile)
+
+    // Read output file and assert expected results
+    expect(fs.existsSync(outputFile), `File doesn't exist: ${outputFile} `).toBe(true)
+    const patients = await parseXlsx(outputFile)
+    patients.forEach((patient) => assertExpectedResults(patient))
+  })
+
+  it('Computes scores from a xlsx and ouputs a csv file', async () => {
     const inputFile = './test/data/IPSSMexample.xlsx'
     const outputFile = './test/data/IPSSMexample-out.csv'
 

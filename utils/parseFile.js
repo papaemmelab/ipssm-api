@@ -65,4 +65,25 @@ const writeCsv = async (outputFile, data) => {
     throw new Error(`Unable to write file ${outputFile}`)
   }
 }
-export { parseCsv, parseXlsx, writeCsv }
+
+// Write annotated xlsx file
+const writeXlsx = async (outputFile, data) => {
+  const workbook = new Excel.Workbook()
+  const worksheet = workbook.addWorksheet('Sheet 1')
+
+  // Assuming `data` is an array of objects with consistent keys
+  const headers = Object.keys(data[0])
+  worksheet.addRow(headers)
+
+  // Add the rows from data
+  data.forEach(item => {
+    worksheet.addRow(headers.map(header => item[header]))
+  })
+
+  await workbook.xlsx.writeFile(outputFile)
+
+  if (!fs.existsSync(outputFile)) {
+    throw new Error(`Unable to write file ${outputFile}`)
+  }
+}
+export { parseCsv, parseXlsx, writeCsv, writeXlsx }

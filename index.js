@@ -1,6 +1,6 @@
 import { processInputs } from './utils/preprocess.js'
 import { computeIpssm, computeIpssr as ipssr } from './utils/risk.js'
-import { parseCsv, parseXlsx, writeCsv } from './utils/parseFile.js'
+import { parseCsv, parseXlsx, writeCsv, writeXlsx } from './utils/parseFile.js'
 
 // IPSS-M risk score method
 const ipssm = (patientInput) => {
@@ -10,6 +10,10 @@ const ipssm = (patientInput) => {
 
 // IPSS-M, IPSS-R, and IPSS-RA risks score from a csv/xlsx file method
 const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
+
+  if (!inputFile || !outputFile) {
+    throw new Error('Input and output files are required')
+  }
 
   let patients = []
   if (inputFile.endsWith('.csv') || inputFile.endsWith('.tsv')) {
@@ -55,14 +59,15 @@ const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
 
     return patient
   })
-
+  
   // Create new csv file with annotated patients
-  if (!outputFile) {
-    outputFile = inputFile.replace('.csv', '.annotated.csv')
-    console.log(outputFile)
+  if (outputFile.endsWith('.csv') || outputFile.endsWith('.tsv')) {
+    await writeCsv(outputFile, annotatedPatients)
+  } else if (outputFile.endsWith('.xlsx')) {
+    await writeXlsx(outputFile, annotatedPatients)
+  } else {
+    throw new Error(`Output File type not supported (only .csv, .tsv, .xlsx))`)
   }
-
-  await writeCsv(outputFile, annotatedPatients)
   console.log(`✅ Annotated file written to: ${outputFile}`)
 }
 

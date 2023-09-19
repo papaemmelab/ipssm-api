@@ -160,53 +160,64 @@ const outputFile = 'IPSSMexample.annotated.csv'
 await annotateFile(inputFile, outputFile)
 ```
 
+or with an excel file:
+
+```js
+import { annotateFile } from 'ipssm'
+
+const inputFile = './test/data/IPSSMexample.xlsx'
+const outputFile = 'IPSSMexample.annotated.xlsx'
+
+await annotateFile(inputFile, outputFile)
+```
+
 ### 🗒️ Input Variables Definition
 
 | Category                   | Variable Explanation          | Variable     | Unit                         | Possible Value                                              |
 |----------------------------|-------------------------------|--------------|------------------------------|-------------------------------------------------------------|
-| clinical                   | Hemoglobin                    | `HB`         | numerical, in g/dL           | 4-20                                                        |
-| clinical                   | Platelets                     | `PLT`        | numerical, in Giga/L         | 0-2000                                                      |
-| clinical                   | Bone Marrow Blasts            | `BM_BLAST`   | numerical, in %              | 0-30                                                        |
-| clinical (only for IPSS-R) | Absolute Neutrophil Count     | `ANC`        | numerical, in Giga/L         | 0-15                                                        |
-| clinical (only for IPSS-RA)| Bone Marrow Blasts            | `AGE`        | numerical, in years          | 18-120                                                      |
-| cytogenetics               | Presence of del(5q)           | `del5q`      | binary                       | 0/1                                                         |
-| cytogenetics               | Presence of -7/del(7q)        | `del7_7q`    | binary                       | 0/1                                                         |
-| cytogenetics               | Presence of -17/del(17p)      | `del17_17p`  | binary                       | 0/1                                                         |
-| cytogenetics               | Complex karyotype             | `complex`    | binary                       | 0/1                                                         |
+| clinical                   | Hemoglobin                    | `HB`         | numerical, in g/dL           | [`4`-`20`]                                                      |
+| clinical                   | Platelets                     | `PLT`        | numerical, in Giga/L         | [`0`-`2000`]                                                    |
+| clinical                   | Bone Marrow Blasts            | `BM_BLAST`   | numerical, in %              | [`0`-`30`]                                                      |
+| clinical (only for IPSS-R) | Absolute Neutrophil Count     | `ANC`        | numerical, in Giga/L         | [`0`-`15`]                                                      |
+| clinical (only for IPSS-RA)| Bone Marrow Blasts            | `AGE`        | numerical, in years          | [`18`-`120`]                                                    |
+| cytogenetics               | Presence of del(5q)           | `del5q`      | binary                       | `0`/`1`                                                         |
+| cytogenetics               | Presence of -7/del(7q)        | `del7_7q`    | binary                       | `0`/`1`                                                         |
+| cytogenetics               | Presence of -17/del(17p)      | `del17_17p`  | binary                       | `0`/`1`                                                         |
+| cytogenetics               | Complex karyotype             | `complex`    | binary                       | `0`/`1`                                                         |
 | cytogenetics               | Cytogenetics Category         | `CYTO_IPSSR` | categorical                  | `Very Good`/`Good`/`Intermediate`/`Poor`/`Very Poor`        |
-| TP53 locus                 | Number of TP53 mutations      | `TP53mut`    | categorical                  | 0/1/`2 or more`                                             |
-| TP53 locus                 | Maximum TP53 VAF              | `TP53maxvaf` | numerical, between 0 and 1   | 0-1                                                         |
-| TP53 locus                 | Loss of heterozygosity at TP53| `TP53loh`    | binary                       | 0/1                                                         |
-| MLL and FLT3 mutations     | MLL PTD                       | `MLL_PTD`    | binary                       | 0/1                                                         |
-| MLL and FLT3 mutations     | FLT3 ITD or TKD               | `FLT3`       | binary                       | 0/1                                                         |
-| gene main effect           | ASXL1                         | `ASXL1`      | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | CBL                           | `CBL`        | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | DNMT3A                        | `DNMT3A`     | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | ETV6                          | `ETV6`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | EZH2                          | `EZH2`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | IDH2                          | `IDH2`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | KRAS                          | `KRAS`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | NPM1                          | `NPM1`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | NRAS                          | `NRAS`       | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | RUNX1                         | `RUNX1`      | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | SF3B1                         | `SF3B1`      | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | SRSF2                         | `SRSF2`      | binary                       | 0/1/`NA`                                                    |
-| gene main effect           | U2AF1                         | `U2AF1`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `BCOR`       | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `BCORL1`     | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `CEBPA`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `ETNK1`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `GATA2`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `GNB1`       | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `IDH1`       | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `NF1`        | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `PHF6`       | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `PPM1D`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `PTPN11`     | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `PRPF8`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `SETBP1`     | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `STAG2`      | binary                       | 0/1/`NA`                                                    |
-| gene residual              |                               | `WT1`        | binary                       | 0/1/`NA`                                                    |
+| TP53 locus                 | Number of TP53 mutations      | `TP53mut`    | categorical                  | `0`/`1`/`2 or more`                                             |
+| TP53 locus                 | Maximum TP53 VAF              | `TP53maxvaf` | numerical, between 0 and 1   | [`0`-`1`]                                                       |
+| TP53 locus                 | Loss of heterozygosity at TP53| `TP53loh`    | binary                       | `0`/`1`                                                         |
+| MLL and FLT3 mutations     | MLL PTD                       | `MLL_PTD`    | binary                       | `0`/`1`                                                         |
+| MLL and FLT3 mutations     | FLT3 ITD or TKD               | `FLT3`       | binary                       | `0`/`1`                                                         |
+| gene main effect           | ASXL1                         | `ASXL1`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | CBL                           | `CBL`        | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | DNMT3A                        | `DNMT3A`     | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | ETV6                          | `ETV6`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | EZH2                          | `EZH2`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | IDH2                          | `IDH2`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | KRAS                          | `KRAS`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | NPM1                          | `NPM1`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | NRAS                          | `NRAS`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | RUNX1                         | `RUNX1`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | SF3B1                         | `SF3B1`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | SRSF2                         | `SRSF2`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene main effect           | U2AF1                         | `U2AF1`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `BCOR`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `BCORL1`     | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `CEBPA`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `ETNK1`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `GATA2`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `GNB1`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `IDH1`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `NF1`        | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `PHF6`       | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `PPM1D`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `PTPN11`     | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `PRPF8`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `SETBP1`     | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `STAG2`      | binary                       | `0`/`1`/`NA`                                                    |
+| gene residual              |                               | `WT1`        | binary                       | `0`/`1`/`NA`                                                    |
 
 
 ## :page_with_curl: Reference
