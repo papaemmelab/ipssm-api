@@ -1,7 +1,6 @@
-import { promises as fs } from 'fs'
-import { toString } from './utils/general.js'
 import { processInputs } from './utils/preprocess.js'
 import { computeIpssm, computeIpssr as ipssr } from './utils/risk.js'
+import { parseCsv, parseXlsx, writeCsv } from './utils/parseFile.js'
 
 // IPSS-M risk score method
 const ipssm = (patientInput) => {
@@ -9,96 +8,62 @@ const ipssm = (patientInput) => {
   return computeIpssm(processed)
 }
 
-// IPSS-M, IPSS-R, and IPSS-RA risks score from a csv file method
-const annotateFile = async (inputFile, outFile, separator=',', skipIpssr=false) => {
-  const data = await fs.readFile(inputFile, 'utf-8')
-  const headers = data.split('\n')[0].trim().split(separator)
+// IPSS-M, IPSS-R, and IPSS-RA risks score from a csv/xlsx file method
+const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
 
-  const patients = data
-    .split('\n')
-    .slice(1)
-    .filter((i) => i.trim())
-    .map((i) => i.split(separator))
-
-  console.log(`\x1b[33m File has ${patients.length} patients \x1b[0m`)
+  let patients = []
+  if (inputFile.endsWith('.csv') || inputFile.endsWith('.tsv')) {
+    patients = await parseCsv(inputFile)
+  } else if (inputFile.endsWith('.xlsx')) {
+    patients = await parseXlsx(inputFile)
+  } else {
+    throw new Error('File type not supported')
+  }
 
   const annotatedPatients = patients.map((patient) => {
-    // Convert to numbers
-    let patientFields = Object.fromEntries(
-      patient.map((fieldValue, i) => [
-        headers[i],
-        isNaN(fieldValue) ? fieldValue : Number(fieldValue),
-      ])
-    )
-
-    // Add IPSS-M annotation
-    const { means, best, worst } = ipssm(patientFields)
-
-    patientFields = {
-      ...patientFields,
-      IPSSM_SCORE: means.riskScore,
-      IPSSM_CAT: means.riskCat,
-      IPSSM_SCORE_BEST: best.riskScore,
-      IPSSM_CAT_BEST: best.riskCat,
-      IPSSM_SCORE_WORST: worst.riskScore,
-      IPSSM_CAT_WORST: worst.riskCat,
+    const ipssmResult = ipssm(patient)
+    // Add IPSS-M results to patient object
+    patient = {
+      ...patient,
+      IPSSM_SCORE: ipssmResult.means.riskScore,
+      IPSSM_CAT: ipssmResult.means.riskCat,
+      IPSSM_SCORE_BEST: ipssmResult.best.riskScore,
+      IPSSM_CAT_BEST: ipssmResult.best.riskCat,
+      IPSSM_SCORE_WORST: ipssmResult.worst.riskScore,
+      IPSSM_CAT_WORST: ipssmResult.worst.riskCat,
     }
 
-    // Add IPSS-R and IPSS-RA annotation, if requested
     if (!skipIpssr) {
-
-      const {
-        IPSSR_SCORE,
-        IPSSR,
-        IPSSRA_SCORE,
-        IPSSRA,
-      } = ipssr({
-        hb: patientFields.HB,
-        anc: patientFields.ANC,
-        plt: patientFields.PLT,
-        bmblast: patientFields.BM_BLAST,
-        cytoIpssr: patientFields.CYTO_IPSSR,
-        age: patientFields.AGE,
+      const ipssrResult = ipssr({
+        hb: patient.HB,
+        anc: patient.ANC,
+        plt: patient.PLT,
+        bmblast: patient.BM_BLAST,
+        cytoIpssr: patient.CYTO_IPSSR,
+        age: patient.AGE,
       })
 
-      patientFields = {
-        ...patientFields,
-        IPSSR_SCORE: IPSSR_SCORE,
-        IPSSR_CAT: IPSSR,
-        IPSSRA_SCORE: IPSSRA_SCORE,
-        IPSSRA_CAT: IPSSRA,
+      // Add IPSS-R results to patient object
+      patient = {
+        ...patient,
+        IPSSR_SCORE: ipssrResult.IPSSR_SCORE,
+        IPSSR_CAT: ipssrResult.IPSSR,
+        IPSSRA_SCORE: ipssrResult.IPSSRA_SCORE,
+        IPSSRA_CAT: ipssrResult.IPSSRA,
       }
     }
 
-    return Object.values(patientFields)
+    return patient
   })
 
   // Create new csv file with annotated patients
-  if (!outFile) {
-    outFile = inputFile.replace('.csv', '.annotated.csv')
-    console.log(outFile)
+  if (!outputFile) {
+    outputFile = inputFile.replace('.csv', '.annotated.csv')
+    console.log(outputFile)
   }
-  const ipssRColumns = [
-    'IPSSR_SCORE',
-    'IPSSR_CAT',
-    'IPSSRA_SCORE',
-    'IPSSRA_CAT'
-  ]
-  const ipssMColumns = [
-    'IPSSM_SCORE',
-    'IPSSM_CAT',
-    'IPSSM_SCORE_BEST',
-    'IPSSM_CAT_BEST',
-    'IPSSM_SCORE_WORST',
-    'IPSSM_CAT_WORST',
-  ]
-  const outHeaders = [
-    ...headers,
-    ...ipssMColumns,
-    ...(!skipIpssr ?  ipssRColumns : []),
-  ]
-  const outData = [outHeaders, ...annotatedPatients].map(row => row.map(column => toString(column)).join(separator)).join('\n')
-  await fs.writeFile(outFile, outData, 'utf-8');
+
+  await writeCsv(outputFile, annotatedPatients)
+  console.log(`✅ Annotated file written to: ${outputFile}`)
 }
 
 export { ipssm, ipssr, annotateFile }

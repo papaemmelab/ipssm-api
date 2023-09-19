@@ -1,48 +1,68 @@
-import { promises as fs } from 'fs'
+import fs, { promises as asyncFs } from 'fs'
 import Papa from 'papaparse'
 import Excel from 'exceljs'
 
-const parseCsv = async (filePath) => {
-    const dataString = await fs.readFile(filePath, 'utf-8')
-    const { data } = Papa.parse(dataString, { header: true, skipEmptyLines: true })
-    return data
+// Coerce numeric values to numbers
+const coerceNumeric = (patients) => {
+  return patients.map((patient) => {
+    return Object.fromEntries(
+      Object.entries(patient).map(([header, value]) => [
+        header, isNaN(value) ? value : Number(value),
+      ])
+    )
+  })
 }
 
-
-const parseXlsx = async (filePath) => {
-    const workbook = new Excel.Workbook()
-    await workbook.xlsx.readFile(filePath)
-    
-    let jsonData = []
-    
-    workbook.eachSheet((worksheet, sheetId) => {
-        let sheetData = []
-        let headers = []
-        worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-            // If first row, consider it as header
-            if (rowNumber === 1) {
-                headers = row.values.slice(1)
-                return
-            }
-            // Create an object based on the header and row data
-            const rowData = {}
-            row.values.slice(1).forEach((value, index) => {
-                rowData[headers[index]] = value
-            })
-            sheetData.push(rowData)
-        })
-        jsonData.push({sheet: worksheet.name, data: sheetData})
-    })
-    
-    // Find Worksheet with Patient Data
-    let data = null
-    const expectedKeys = ['BM_BLAST', 'HB', 'PLT']
-    jsonData.forEach((sheet) => {
-        if (expectedKeys.every(key => sheet.data[0].hasOwnProperty(key))) {
-            data = sheet.data
-        }
-    })
-    return data
+// Read csv or tsv file
+const parseCsv = async (inputFile) => {
+  const dataString = await asyncFs.readFile(inputFile, 'utf-8')
+  const { data } = Papa.parse(dataString, { header: true, skipEmptyLines: true })
+  return coerceNumeric(data)
 }
 
-export { parseCsv, parseXlsx }
+// Read xlsx file
+const parseXlsx = async (inputFile) => {
+  const workbook = new Excel.Workbook()
+  await workbook.xlsx.readFile(inputFile)
+  
+  let jsonData = []
+  workbook.eachSheet((worksheet, sheetId) => {
+      let sheetData = []
+      let headers = []
+      worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+          // If first row, consider it as header
+          if (rowNumber === 1) {
+              headers = row.values.slice(1)
+              return
+          }
+          // Create an object based on the header and row data
+          const rowData = {}
+          row.values.slice(1).forEach((value, index) => {
+              rowData[headers[index]] = value
+          })
+          sheetData.push(rowData)
+      })
+      jsonData.push({sheet: worksheet.name, data: sheetData})
+  })
+
+  // Find Worksheet with Patient Data
+  let data = null
+  const expectedKeys = ['BM_BLAST', 'HB', 'PLT']
+  jsonData.forEach((sheet) => {
+      if (expectedKeys.every(key => sheet.data[0].hasOwnProperty(key))) {
+          data = sheet.data
+      }
+  })
+  return coerceNumeric(data)
+}
+
+// Write annotated csv file
+const writeCsv = async (outputFile, data) => {
+  const csvString = Papa.unparse(data)
+  fs.writeFileSync(outputFile, csvString, 'utf-8')
+
+  if (!fs.existsSync(outputFile)) {
+    throw new Error(`Unable to write file ${outputFile}`)
+  }
+}
+export { parseCsv, parseXlsx, writeCsv }
