@@ -19,7 +19,7 @@ const betas = [
   { name: 'ETV6', coeff: 0.391, means: 0.0216, worst: 1, best: 0 },
   { name: 'NPM1', coeff: 0.43, means: 0.0112, worst: 1, best: 0 },
   { name: 'TP53multi', coeff: 1.18, means: 0.071, worst: 1, best: 0 },
-  { name: 'FLT3all', coeff: 0.798, means: 0.0108, worst: 1, best: 0 },
+  { name: 'FLT3', coeff: 0.798, means: 0.0108, worst: 1, best: 0 },
   { name: 'Nres2', coeff: 0.231, means: 0.388, worst: 2, best: 0 },
 ]
 
