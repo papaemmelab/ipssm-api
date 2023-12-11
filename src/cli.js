@@ -2,13 +2,13 @@
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { annotateFile } from '../index.js'
+import { annotateFile } from './index.js'
 
 const argv = yargs(hideBin(process.argv))
   .usage('Annotate file with IPSS-M and IPSS-R.\n\nUsage: $0 <inputFile> <outputFile>')
   .command(
     '$0 <inputFile> <outputFile>', 
-    '',
+    'Annotate with IPSS-M and IPSS-R a file with patients.',
     (yargs) => {
       yargs
         .positional('inputFile', {
