@@ -1,4 +1,6 @@
-const betas = [
+import { BetaRiskScore } from '../types'
+
+const betas: BetaRiskScore[] = [
   { name: 'CYTOVEC', coeff: 0.287, means: 1.39, worst: 4, best: 0 },
   { name: 'BLAST5', coeff: 0.352, means: 0.922, worst: 4, best: 0 },
   { name: 'TRANSF_PLT100', coeff: -0.222, means: 1.41, worst: 0, best: 2.5 },

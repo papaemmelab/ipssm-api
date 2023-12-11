@@ -11,7 +11,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,9 @@
   },
   "homepage": "https://github.com/papaemmelab/ipssm-js#readme",
   "devDependencies": {
+    "@types/node": "^20.10.4",
+    "@types/papaparse": "^5.3.14",
+    "typescript": "^5.3.3",
     "vitest": "^0.34.4"
   },
   "dependencies": {

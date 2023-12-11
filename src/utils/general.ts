@@ -1,16 +1,16 @@
 // Useful utilities
 import { genesMain, genesRes } from './genes.js'
 
-const range = (start, stop, step = 1) => {
+const range = (start: number, stop: number, step: number = 1): number[] => {
   return [...Array(stop - start).keys()]
     .filter((i) => !(i % Math.round(step)))
     .map((v) => start + v)
 }
 
-const round = (value, digits = 4) =>
+const round = (value: number, digits: number = 4): number =>
   Math.round(value * 10 ** digits) / 10 ** digits
 
-const italicizeGeneNames = (string) => {
+const italicizeGeneNames = (value: string): string => {
   const genes = [
     ...genesMain,
     ...genesRes,
@@ -19,14 +19,14 @@ const italicizeGeneNames = (string) => {
     'KMT2A',
     'TP53',
   ].reverse()
-  let italicized = string
+  let italicized = value
   genes.forEach(
     (gene) => (italicized = italicized.replace(gene, `<i>${gene}</i>`))
   )
   return italicized
 }
 
-const toString = (value) => {
+const toString = (value: string | null | undefined): string => {
   if (value === null || value === undefined) {
     return 'NA'
   }

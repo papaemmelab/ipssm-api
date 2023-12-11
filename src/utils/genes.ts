@@ -1,4 +1,4 @@
-export const genesMain = [
+export const genesMain: string[] = [
   'SF3B1',
   'ASXL1',
   'SRSF2',
@@ -14,7 +14,7 @@ export const genesMain = [
   'NPM1',
 ]
 
-export const genesRes = [
+export const genesRes: string[] = [
   'BCOR',
   'STAG2',
   'NF1',
