@@ -2,7 +2,7 @@
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { annotateFile } from './index.js'
+import { annotateFile } from './index'
 
 const argv = yargs(hideBin(process.argv))
   .usage('Annotate file with IPSS-M and IPSS-R.\n\nUsage: $0 <inputFile> <outputFile>')
@@ -27,13 +27,14 @@ const argv = yargs(hideBin(process.argv))
   .example('$0 in.csv out.csv', 'annotate a csv file.')
   .help('h')
   .alias('h', 'help')
-  .argv
+  .argv;
 
 (async () => {
   try {
+    // @ts-ignore
     await annotateFile(argv.inputFile, argv.outputFile)
     console.log('File annotated successfully.')
   } catch (error) {
-    console.error('Error annotating file:', error.message)
+    console.error('Error annotating file:', (error as Error).message)
   }
 })()
