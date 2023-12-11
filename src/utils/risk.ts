@@ -59,18 +59,17 @@ const computeIpssr = (
   rounding: boolean = true,
   roundingDigits: number = 4
 ) : PatientWithIpssr => {
-  
   // Get proper Cytogenetic category
   const cytovecMap: { [key: string]: number } = {'Very Good': 0, 'Good': 1, 'Intermediate': 2, 'Poor': 3, 'Very Poor': 4}
   if (!cytovec && cytoIpssr) {
     cytovec = cytovecMap[cytoIpssr]
   }
-  if (cytovec === undefined) {
+  if (cytovec === undefined || cytovec === null || cytovec < 0 || cytovec > 4) {
     throw new Error('Cytogenetic category is not valid.')
   }
 
   // Get Variable Ranges, defining each category breaks and value mapping
-  const bmblastBreak = [-Infinity, 2, 5, 10, Infinity]
+  const bmblastBreak = [-Infinity, 2, 4.99, 10, Infinity]
   const hbBreak = [-Infinity, 8, 10, Infinity]
   const pltBreak = [-Infinity, 50, 100, Infinity]
   const ancBreak = [-Infinity, 0.8, Infinity]
@@ -90,7 +89,7 @@ const computeIpssr = (
   let ipssr: string | null = null
   let ipssrRaw: number | null = null
 
-  ipssrRaw = hbri + ancri + pltri + bmblastri + cytovec
+  ipssrRaw = bmblastri + hbri + pltri + ancri + cytovec
   if (rounding) {
     ipssrRaw = round(ipssrRaw, roundingDigits)
   }
@@ -99,16 +98,15 @@ const computeIpssr = (
   // Build IPSS-RA Age-Adjusted if available
   let ipssra: string | null = null
   let ipssraRaw: number | null = null
-  
+
   if (age !== null && age !== undefined) {
-    const ageAdjust = (age - 70) * (0.05 - ipssrRaw * 0.005)
+    const ageAdjust = (Number(age) - 70) * (0.05 - ipssrRaw * 0.005)
     ipssraRaw = ipssrRaw + ageAdjust
     if (rounding) {
       ipssraRaw = round(ipssraRaw, roundingDigits)
     }
     ipssra = cutBreak(ipssraRaw, ipssrgBreaks, ipssrCat).toString()
   }
-
   return {
     IPSSR_SCORE: ipssrRaw,
     IPSSR_CAT: ipssr,
@@ -156,8 +154,9 @@ const computeIpssm = (
     const contributions: {[key: string]: number} = {}
 
     betas.forEach((beta) => {
-      // Impute if missing variable
       let value = patientValues[beta.name as keyof PatientInput]
+
+      // Impute if missing variable
       if (value === 'NA' || value === null) {
         value = beta[scenario as keyof BetaRiskScore]
       }
@@ -167,7 +166,7 @@ const computeIpssm = (
 
       // Contribution Normalization
       contributions[beta.name] =
-        ((Number(value) - beta.means) * beta.coeff) / Math.log(2) ?? 0
+        ((Number(value) - beta.means) * beta.coeff) / Math.log(2)
     })
 
     // risk score

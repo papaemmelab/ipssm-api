@@ -134,9 +134,7 @@ const processInputs = (patientInput: PatientInput): PatientInput => {
     worst: nResWorst,
     best: nResBest,
   }
-
   return processed
 }
-
 
 export { processInputs }

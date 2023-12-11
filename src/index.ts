@@ -39,7 +39,7 @@ const annotateFile = async (inputFile: string, outputFile: string, skipIpssr: bo
       IPSSM_CAT_WORST: ipssmResult.worst.riskCat,
     }
 
-    if (!skipIpssr && patient.ANC) {
+    if (!skipIpssr && patient.ANC !== undefined && patient.ANC !== null) {
       // Calculate IPSS-R and add to patient object
       const data: PatientForIpssr = {
         bmblast: patient.BM_BLAST,

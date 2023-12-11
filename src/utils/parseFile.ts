@@ -1,14 +1,27 @@
-import { PatientInput, PatientOutput } from '../types'
+import { PatientInput, PatientOutput, CsvData } from '../types'
 import fs, { promises as asyncFs } from 'fs'
 import Papa, { ParseResult } from 'papaparse'
 import Excel from 'exceljs'
 
 
+// Coerce numeric values to numbers
+const coerceNumeric = (rows: CsvData[]): CsvData[] => {
+  return rows.map((row) => {
+    return Object.fromEntries(
+      Object.entries(row).map(([column, value]) => [
+        // @ts-ignore
+        column, isNaN(value) ? value : Number(value),
+      ])
+    )
+  })
+}
+
 // Read csv or tsv file
 const parseCsv = async (inputFile: string): Promise<PatientInput[]> => {
   const dataString = await asyncFs.readFile(inputFile, 'utf-8')
   const result: ParseResult<PatientInput> = Papa.parse(dataString, { header: true, skipEmptyLines: true })
-  return result.data
+  // @ts-ignore
+  return coerceNumeric(result.data)
 }
 
 // Read xlsx file
@@ -42,7 +55,7 @@ const parseXlsx = async (inputFile: string): Promise<PatientInput[]> => {
               }
               row?.values?.slice(1).forEach((value, index) => {
                 // @ts-ignore
-                rowData[headers[index]] = String(value || '')
+                rowData[headers[index]] = value
               })
               sheetData.push(rowData)
             }
@@ -52,13 +65,14 @@ const parseXlsx = async (inputFile: string): Promise<PatientInput[]> => {
 
   // Find Worksheet with Patient Data
   let data: PatientInput[] | null = null
-  const expectedKeys = ['BM_BLAST', 'HB', 'PLT']
+  const expectedKeys = ['SF3B1', 'U2AF1', 'IDH1']
   jsonData.forEach((sheet) => {
       if (expectedKeys.every(key => sheet.data[0].hasOwnProperty(key))) {
           data = sheet.data
       }
   })
-  return data || []
+  // @ts-ignore
+  return coerceNumeric(data || [])
 }
 
 // Write annotated csv file
