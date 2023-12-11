@@ -64,7 +64,7 @@ describe('Risk Calculations', () => {
     })
   })
 
-  it.skip('Computes scores from a csv file', async () => {
+  it('Computes scores from a csv file', async () => {
     const inputFile = './test/data/IPSSMexample.csv'
     const outputFile = './test/data/IPSSMexample-out.csv'
 
@@ -79,7 +79,7 @@ describe('Risk Calculations', () => {
     patients.forEach((patient) => assertExpectedResults(patient))
   })
 
-  it.skip('Computes scores from a xlsx file', async () => {
+  it('Computes scores from a xlsx file', async () => {
     const inputFile = './test/data/IPSSMexample.xlsx'
     const outputFile = './test/data/IPSSMexample-out.xlsx'
 
@@ -94,7 +94,7 @@ describe('Risk Calculations', () => {
     patients.forEach((patient) => assertExpectedResults(patient))
   })
 
-  it.skip('Computes scores from a csv and ouputs a xlsx file', async () => {
+  it('Computes scores from a csv and ouputs a xlsx file', async () => {
     const inputFile = './test/data/IPSSMexample.csv'
     const outputFile = './test/data/IPSSMexample-out.xlsx'
 
@@ -109,7 +109,7 @@ describe('Risk Calculations', () => {
     patients.forEach((patient) => assertExpectedResults(patient))
   })
 
-  it.skip('Computes scores from a xlsx and ouputs a csv file', async () => {
+  it('Computes scores from a xlsx and ouputs a csv file', async () => {
     const inputFile = './test/data/IPSSMexample.xlsx'
     const outputFile = './test/data/IPSSMexample-out.csv'
 

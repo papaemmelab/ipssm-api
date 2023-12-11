@@ -46,13 +46,13 @@ const processInputs = (patientInput: PatientInput): PatientInput => {
   // Construction of SF3B1 features i.e SF3B1_5q
   processed.SF3B1_5q =
     processed.SF3B1 !== 'NA'
-      ? processed.SF3B1 === '1' &&
-        processed.del5q === '1' &&
-        processed.del7_7q === '0' &&
-        processed.complex === '0'
+      ? Number(processed.SF3B1) === 1 &&
+        Number(processed.del5q) === 1 &&
+        Number(processed.del7_7q) === 0 &&
+        Number(processed.complex) === 0
         ? '1'
         : '0'
-      : processed.del5q === '0'
+      : Number(processed.del5q) === 0
       ? '0'
       : 'NA'
 
@@ -65,29 +65,29 @@ const processInputs = (patientInput: PatientInput): PatientInput => {
     processed.BCORL1 !== 'NA' &&
     processed.RUNX1 !== 'NA' &&
     processed.NRAS !== 'NA'
-      ? processed.SF3B1 === '1' &&
-        processed.SF3B1_5q === '0' &&
-        processed.SRSF2 === '0' &&
-        processed.STAG2 === '0' &&
-        processed.BCOR === '0' &&
-        processed.BCORL1 === '0' &&
-        processed.RUNX1 === '0' &&
-        processed.NRAS === '0'
+      ? Number(processed.SF3B1) === 1 &&
+        Number(processed.SF3B1_5q) === 0 &&
+        Number(processed.SRSF2) === 0 &&
+        Number(processed.STAG2) === 0 &&
+        Number(processed.BCOR) === 0 &&
+        Number(processed.BCORL1) === 0 &&
+        Number(processed.RUNX1) === 0 &&
+        Number(processed.NRAS) === 0
         ? '1'
         : '0'
-      : processed.SRSF2 === '1' ||
-        processed.STAG2 === '1' ||
-        processed.BCOR === '1' ||
-        processed.BCORL1 === '1' ||
-        processed.RUNX1 === '1' ||
-        processed.NRAS === '1'
-      ? '0'
+      : Number(processed.SRSF2) === 1 ||
+        Number(processed.STAG2) === 1 ||
+        Number(processed.BCOR) === 1 ||
+        Number(processed.BCORL1) === 1 ||
+        Number(processed.RUNX1) === 1 ||
+        Number(processed.NRAS) === 1
+      ? '1'
       : 'NA'
 
   // Construction of TP53multi feature
   processed.TP53loh =
     (processed.TP53maxvaf ?? 0) / 100 > 0.55 ||
-    processed.del17_17p === '1'
+    Number(processed.del17_17p) === 1
       ? '1'
       : processed.TP53loh
 
