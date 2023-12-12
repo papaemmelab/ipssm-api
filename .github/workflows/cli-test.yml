@@ -1,4 +1,4 @@
-name: CLI Test
+name: Can be run as CLI
 
 on: [push]
 
@@ -13,7 +13,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18'
+        node-version: '18.x'
 
     - name: Install dependencies
       run: npm ci
@@ -33,8 +33,8 @@ jobs:
         # Check the stout for the expected output
         EXPECTED="✅ Annotated file written to: test.csv\nFile annotated successfully."
         if [ "$OUTPUT" = "$EXPECTED" ]; then
-        echo "Output matches expected"
+            echo "Output matches expected"
         else
-        echo "Output does not match expected"
-        exit 1
+            echo "Output does not match expected"
+            exit 1
         fi

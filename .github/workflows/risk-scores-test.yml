@@ -1,6 +1,6 @@
 name: Compute IPSS-M and IPSS-M Risks on IWG-PM Cohort (Bernard et al, 2022 NJEM Evid)
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
