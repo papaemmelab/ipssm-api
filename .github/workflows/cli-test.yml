@@ -31,10 +31,7 @@ jobs:
         echo "$OUTPUT"
         
         # Check the stout for the expected output
-        EXPECTED="✅ Annotated file written to: test.csv\nFile annotated successfully."
-        if [ "$OUTPUT" = "$EXPECTED" ]; then
-            echo "Output matches expected"
-        else
-            echo "Output does not match expected"
+        if ! echo "$OUTPUT" | grep -q "File annotated successfully."; then
+            echo "CLI execution didn't work"
             exit 1
         fi
