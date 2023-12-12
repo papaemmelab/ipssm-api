@@ -1,3 +1,9 @@
 # Node modules
 node_modules
+
+# Compiled JS files
+dist
+
+# Data test files
 test/data/*-out.*
+test.csv

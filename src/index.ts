@@ -1,21 +1,22 @@
-import { processInputs } from './utils/preprocess.js'
-import { computeIpssm, computeIpssr as ipssr } from './utils/risk.js'
-import { parseCsv, parseXlsx, writeCsv, writeXlsx } from './utils/parseFile.js'
+import { PatientInput, PatientOutput, IpssmScores, PatientForIpssr, CsvData } from './types'
+import { processInputs } from './utils/preprocess'
+import { computeIpssm, computeIpssr as ipssr } from './utils/risk'
+import { parseCsv, parseXlsx, writeCsv, writeXlsx } from './utils/parseFile'
 
 // IPSS-M risk score method
-const ipssm = (patientInput) => {
+const ipssm = (patientInput: PatientInput): IpssmScores => {
   const processed = processInputs(patientInput)
   return computeIpssm(processed)
 }
 
 // IPSS-M, IPSS-R, and IPSS-RA risks score from a csv/xlsx file method
-const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
+const annotateFile = async (inputFile: string, outputFile: string, skipIpssr: boolean = false): Promise<void> => {
 
   if (!inputFile || !outputFile) {
     throw new Error('Input and output files are required')
   }
 
-  let patients = []
+  let patients: PatientInput[] = []
   if (inputFile.endsWith('.csv') || inputFile.endsWith('.tsv')) {
     patients = await parseCsv(inputFile)
   } else if (inputFile.endsWith('.xlsx')) {
@@ -24,10 +25,11 @@ const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
     throw new Error('File type not supported')
   }
 
-  const annotatedPatients = patients.map((patient) => {
+  const annotatedPatients: PatientOutput[] = patients.map((patient) => {
+    // Calculate IPSS-M and add to patient object
     const ipssmResult = ipssm(patient)
-    // Add IPSS-M results to patient object
-    patient = {
+    
+    let annotatedPatient: PatientOutput = {
       ...patient,
       IPSSM_SCORE: ipssmResult.means.riskScore,
       IPSSM_CAT: ipssmResult.means.riskCat,
@@ -37,27 +39,29 @@ const annotateFile = async (inputFile, outputFile, skipIpssr=false) => {
       IPSSM_CAT_WORST: ipssmResult.worst.riskCat,
     }
 
-    if (!skipIpssr) {
-      const ipssrResult = ipssr({
-        hb: patient.HB,
-        anc: patient.ANC,
-        plt: patient.PLT,
+    if (!skipIpssr && patient.ANC !== undefined && patient.ANC !== null) {
+      // Calculate IPSS-R and add to patient object
+      const data: PatientForIpssr = {
         bmblast: patient.BM_BLAST,
+        hb: patient.HB,
+        plt: patient.PLT,
+        anc: patient.ANC,
         cytoIpssr: patient.CYTO_IPSSR,
         age: patient.AGE,
-      })
+      }
 
-      // Add IPSS-R results to patient object
-      patient = {
-        ...patient,
+      const ipssrResult = ipssr(data)
+
+      annotatedPatient = {
+        ...annotatedPatient,
         IPSSR_SCORE: ipssrResult.IPSSR_SCORE,
-        IPSSR_CAT: ipssrResult.IPSSR,
+        IPSSR_CAT: ipssrResult.IPSSR_CAT,
         IPSSRA_SCORE: ipssrResult.IPSSRA_SCORE,
-        IPSSRA_CAT: ipssrResult.IPSSRA,
+        IPSSRA_CAT: ipssrResult.IPSSRA_CAT,
       }
     }
 
-    return patient
+    return annotatedPatient
   })
   
   // Create new csv file with annotated patients

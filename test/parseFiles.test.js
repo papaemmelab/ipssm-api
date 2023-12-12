@@ -1,7 +1,7 @@
-import { it, describe, expect } from 'vitest'
-import { parseCsv, parseXlsx } from '../utils/parseFile.js'
-import { assertExpectedResults } from './testUtils.js'
-import { ipssm, ipssr } from '../index.js'
+import { it, describe } from 'vitest'
+import { assertExpectedResults } from './testUtils'
+import { parseCsv, parseXlsx } from '../src/utils/parseFile'
+import { ipssm, ipssr } from '../src/index'
 
 
 const runRiskOnPatients = (patients) => {
@@ -28,9 +28,9 @@ const runRiskOnPatients = (patients) => {
       IPSSM_SCORE_WORST: ipssmResult.worst.riskScore,
       IPSSM_CAT_WORST: ipssmResult.worst.riskCat,
       IPSSR_SCORE: ipssrResult.IPSSR_SCORE,
-      IPSSR_CAT: ipssrResult.IPSSR,
+      IPSSR_CAT: ipssrResult.IPSSR_CAT,
       IPSSRA_SCORE: ipssrResult.IPSSRA_SCORE,
-      IPSSRA_CAT: ipssrResult.IPSSRA,
+      IPSSRA_CAT: ipssrResult.IPSSRA_CAT,
     }
 
     // Assert expected results

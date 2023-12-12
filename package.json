@@ -3,15 +3,16 @@
   "version": "1.0.4",
   "description": "Javascript Package for the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "bin": {
-    "ipssm": "./bin/cli.js"
+    "ipssm": "./dist/cli.js"
   },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,15 @@
   },
   "homepage": "https://github.com/papaemmelab/ipssm-js#readme",
   "devDependencies": {
+    "@types/node": "^20.10.4",
+    "@types/papaparse": "^5.3.14",
+    "@types/yargs": "^17.0.32",
+    "typescript": "^5.3.3",
     "vitest": "^0.34.4"
   },
   "dependencies": {
     "exceljs": "^4.3.0",
+    "ipssm": "^1.0.4",
     "papaparse": "^5.4.1",
     "yargs": "^17.7.2"
   }
