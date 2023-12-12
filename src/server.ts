@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { annotateFile, ipssm, ipssr } from './index';
+import { validatePatientForIpssr } from './utils/validation';
 
 const app = express();
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
@@ -39,7 +40,7 @@ app.post('/ipssm', async (req: Request, res: Response) => {
 });
 
 // Endpoint for Ipssr
-app.post('/ipssr', async (req: Request, res: Response) => {
+app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) => {
   const patient = req.body;
 
   try {
