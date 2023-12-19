@@ -13,7 +13,8 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc",
-    "serve": "tsc && node dist/server.js"
+    "serve": "tsc && node dist/server.js",
+    "docs": "npx @redocly/cli build-docs openapi.yml"
   },
   "repository": {
     "type": "git",
