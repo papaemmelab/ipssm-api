@@ -1,11 +1,15 @@
 openapi: 3.0.0
 info:
-  title: IPSS-M Api Documentation
+  title: IPSS-M API Reference
+  summary: API reference for the IPSS-M Risk Calculation described in **Bernard et al 2022** in *NJEM Evidence* (https://doi.org/10.1056/EVIDoa2200008).
   version: 1.0.0
   x-logo:
-    url: 'https://raw.githubusercontent.com/papaemmelab/ipssm-api/mds-foundation-logo.svg'
+    url: 'https://github.com/papaemmelab/ipssm-js/assets/7906289/b3466121-0299-48c6-91cc-c35b70472a79'
     backgroundColor: '#FFFFFF'
     altText: 'MDS Foundation'
+  contact:
+    name: For API support, contact Developer Juan E. Arango Ossa
+    email: arangooj@mskcc.org
 paths:
   /ipssm:
     post:
