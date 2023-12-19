@@ -21,7 +21,7 @@ API and CLI of the Molecular International Prognostic Scoring System (IPSS-M) fo
 
 - [📖 IPSS-M Publication](#page_with_curl-ipss-m-publication)
 - [🚀 API Usage](#rocket-api-usage)
-- [👾 CLI Usage](#alien-cli-usage)
+- [🤖 CLI Usage](#robot-cli-usage)
   - [🔥 Using it as a node/javascript package](#fire-using-it-as-a-nodejavascript-package)
     - [💥 IPSS-M](#boom-ipss-m)
     - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
@@ -139,7 +139,7 @@ $ curl \
 }
 ```
 
-## :alien: CLI Usage
+## :robot: CLI Usage
 
 You can use the command line interface to annotate a file with patients, where each row is a patient and each column is a variable.
 
