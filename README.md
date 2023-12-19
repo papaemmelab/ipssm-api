@@ -343,7 +343,7 @@ await annotateFile(inputFile, outputFile)
 | TP53 locus                 | Number of TP53 mutations      | `TP53mut`    | categorical                  | `0`/`1`/`2 or more`                                             |
 | TP53 locus                 | Maximum TP53 VAF              | `TP53maxvaf` | numerical, between 0 and 1   | [`0`-`1`]                                                       |
 | TP53 locus                 | Loss of heterozygosity at TP53| `TP53loh`    | binary                       | `0`/`1`                                                         |
-| MLL and FLT3 mutations     | MLL PTD                       | `MLL_PTD`    | binary                       | `0`/`1`                                                         |
+| MLL and FLT3 mutations     | MLL PTD                       | `MLL_PTD`    | binary                       | `0`/`1` / `NA`                                                        |
 | MLL and FLT3 mutations     | FLT3 ITD or TKD               | `FLT3`       | binary                       | `0`/`1`                                                         |
 | gene main effect           | ASXL1                         | `ASXL1`      | binary                       | `0`/`1`/`NA`                                                    |
 | gene main effect           | CBL                           | `CBL`        | binary                       | `0`/`1`/`NA`                                                    |
