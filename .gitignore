@@ -9,4 +9,4 @@ test/data/*-out.*
 test.csv
 
 # Serverless artifacts
-.serverless/*.zip
+.serverless
