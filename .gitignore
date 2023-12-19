@@ -7,3 +7,6 @@ dist
 # Data test files
 test/data/*-out.*
 test.csv
+
+# Serverless artifacts
+.serverless

@@ -1,0 +1,17 @@
+service: ipssm-api
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: prod
+  region: us-east-1
+
+functions:
+  app:
+    handler: dist/server.handler
+    events:
+      - http: ANY /
+      - http: 'ANY /{proxy+}'
