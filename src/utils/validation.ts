@@ -77,8 +77,6 @@ export const validatePatientForIpssr = (req: Request, res: Response, next: NextF
 
 export const validatePatientForIpssm = (req: Request, res: Response, next: NextFunction) => {
   const { value, error } = patientForIpssmSchema.validate(req.body, { abortEarly: false })
-  console.log(value)
-  console.log(error)
   req.body = value
   handleResponse(error, res, next)
 }

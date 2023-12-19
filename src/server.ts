@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express'
+import path from 'path'
 import { annotateFile, ipssm, ipssr } from './index'
 import { validatePatientForIpssm, validatePatientForIpssr } from './utils/validation'
 import serverless from 'serverless-http'
@@ -14,6 +15,11 @@ app.use((req, _res, next) => {
   console.log(req.body)
   next()
 })
+
+// Serve the redoc swagger documentation
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'redoc-static.html'));
+});
 
 // Endpoint for Ipssm
 app.post('/ipssm', validatePatientForIpssm, async (req: Request, res: Response) => {
@@ -37,7 +43,6 @@ app.post('/ipssm', validatePatientForIpssm, async (req: Request, res: Response) 
 // Endpoint for Ipssr
 app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) => {
   const patient = req.body
-
   try {
     const ipssrResult = ipssr({
       hb: patient.HB,
@@ -47,7 +52,11 @@ app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) 
       cytoIpssr: patient.CYTO_IPSSR,
       age: patient.AGE,
     })
-    res.json(ipssrResult)
+    const response = {
+      patient: patient,
+      ipssr: ipssrResult,
+    }
+    res.json(response)
   } catch (error) {
     console.log((error as Error).stack)
     res.status(500).json({

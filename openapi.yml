@@ -1,0 +1,441 @@
+openapi: 3.0.0
+info:
+  title: IPSS-M API Reference
+  summary: API reference for the IPSS-M Risk Calculation described in **Bernard et al 2022** in *NJEM Evidence* (https://doi.org/10.1056/EVIDoa2200008).
+  version: 1.0.0
+  x-logo:
+    url: 'https://github.com/papaemmelab/ipssm-js/assets/7906289/b3466121-0299-48c6-91cc-c35b70472a79'
+    backgroundColor: '#FFFFFF'
+    altText: 'MDS Foundation'
+  contact:
+    name: For API support, contact Developer Juan E. Arango Ossa
+    email: arangooj@mskcc.org
+paths:
+  /ipssm:
+    post:
+      summary: IPSS-M Risk Score Calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpssmSchema'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpssmResponse'
+        '500':
+          description: An error occurred while calculating IPSS-M risk score
+  /ipssr:
+    post:
+      summary: IPSS-R Risk Score Calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpssrSchema'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpssrResponse'
+        '500':
+          description: An error occurred while calculating IPSS-R risk score
+components:
+  schemas:
+    Clinical:
+      type: object
+      required:
+        - BM_BLAST
+        - HB
+        - PLT
+      properties:
+        # Clinical
+        BM_BLAST:
+          type: number
+          minimum: 0
+          maximum: 30
+          description: "Bone marrow blast percentage (%)"
+        HB:
+          type: number
+          minimum: 4
+          maximum: 20
+          description: "Hemoglobin (g/dL)"
+        PLT:
+          type: number
+          minimum: 0
+          maximum: 2000
+          description: "Platelet count (x10^9/L)"
+    IpssrSchema:
+      allOf:
+        - $ref: '#/components/schemas/Clinical'
+        - type: object
+          required:
+            - ANC
+            - CYTO_IPSSR
+          properties:
+            ANC:
+              type: number
+              minimum: 0
+              maximum: 15
+              description: "Absolute neutrophil count (x10^9/L)"
+            AGE:
+              type: number
+              minimum: 18
+              maximum: 120
+              description: "Age (years)"
+            CYTO_IPSSR:
+              type: string
+              enum: ["Very Good", "Good", "Intermediate", "Poor", "Very Poor"]
+              description: "Cytogenetic risk group"
+    IpssmSchema:
+      allOf:
+        - $ref: '#/components/schemas/Clinical'
+        - type: object
+          required:
+            - CYTO_IPSSR
+          properties:
+            # Cytogenetics
+            del5q:
+              type: number
+              enum: [0, 1]
+              description: "Deletion of chromosome 5q"
+              default: 0
+            del7_7q:
+              type: number
+              enum: [0, 1]
+              description: "Deletion of chromosome 7 or monosomy 7"
+              default: 0
+            del17_17p:
+              type: number
+              enum: [0, 1]
+              description: "Deletion of chromosome 17p"
+              default: 0
+            complex:
+              type: number
+              enum: [0, 1]
+              description: "Complex karyotype (>= 3 abnormalities)"
+              default: 0
+            CYTO_IPSSR:
+              type: string
+              enum: ["Very Good", "Good", "Intermediate", "Poor", "Very Poor"]
+              description: "Cytogenetic risk group"
+            # Molecular
+            TP53mut:
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["0", "1", "2 or more"]
+              description: "Number of TP53 mutations"
+              default: 0
+            TP53maxvaf:
+              type: number
+              minimum: 0
+              maximum: 100
+              description: "Maximum variant allele frequency of TP53 mutation"
+            TP53loh:
+              description: "Loss of heterozygosity at TP53 locus"
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            MLL_PTD:
+              description: "MLL (KMT2A) PTD"
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            FLT3:
+              description: "FLT3 ITD or TKD"
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            # Main Genes
+            ASXL1:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            CBL:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            DNMT3A:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            ETV6:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            EZH2:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            IDH2:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            KRAS:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            NPM1:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            NRAS:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            RUNX1:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            SF3B1:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            SRSF2:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            U2AF1:
+              description: Gene (Individual Weight)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            # Residual Genes
+            BCOR:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            BCORL1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            CEBPA:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            ETNK1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            GATA2:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            GNB1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            IDH1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            NF1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            PHF6:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            PPM1D:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            PRPF8:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            PTPN11:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            SETBP1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            STAG2:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+            WT1:
+              description: Gene (Number of Residual Mutations)
+              default: 0
+              oneOf:
+              - type: number
+                enum: [0, 1]
+              - type: string
+                enum: ["NA"]
+    Risk:
+      type: object
+      properties:
+        riskScore:
+          type: number
+          description: IPSS-M Risk Score
+        riskCat:
+          type: string
+          description: IPSS-M Risk Category
+          enum: ["Very Low", "Low", "Moderate Low", "Moderate High", "High", "Very High"]
+    IpssmResponse:
+      type: object
+      properties:
+        patient:
+          $ref: '#/components/schemas/IpssmSchema'
+        ipssm:
+          type: object
+          properties:
+            means:
+              description: "IPSS-M risk score (mean if any NA value was provided)"
+              $ref: '#/components/schemas/Risk'
+            worst:
+              description: "IPSS-M risk score for worst case scenario of NA cases"
+              $ref: '#/components/schemas/Risk'
+            best:
+              description: "IPSS-M risk score for best case scenario of NA cases"
+              $ref: '#/components/schemas/Risk'
+    IpssrResponse:
+      type: object
+      properties:
+        patient:
+          $ref: '#/components/schemas/IpssrSchema'
+        ipssr:
+          type: object
+          properties:
+            IPSSR_CAT:
+              type: string
+              enum: ["Very Low", "Low", "Intermediate", "High", "Very High"]
+              description: "IPSS-R Risk Category"
+            IPSSR_SCORE:
+              type: number
+              description: "IPSS-R Risk Score"
+            IPSSRA_CAT:
+              type: string
+              enum: ["Very Low", "Low", "Intermediate", "High", "Very High"]
+              description: "IPSS-R Risk Category (Age-Adjusted)"
+            IPSSRA_SCORE:
+              type: number
+              description: "IPSS-R Risk Score (Age-Adjusted)"
