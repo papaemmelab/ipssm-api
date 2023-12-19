@@ -9,6 +9,8 @@
 
 # ipssm API and CLI
 
+⚡️ API Reference Available at: https://api.mds-risk-model.com
+
 API and CLI of the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.
 
 - For the R package, see [papaemmelab/ipssm](https://github.com/papaemmelab/ipssm).
@@ -18,12 +20,12 @@ API and CLI of the Molecular International Prognostic Scoring System (IPSS-M) fo
 ## Table of contents
 
 - [📖 IPSS-M Publication](#page_with_curl-ipss-m-publication)
-- [🚀 Installation instructions](#rocket-installation-instructions)
-- [💥 IPSS-M Usage](#boom-ipss-m-javascript-usage)
-  - [🔥 Compute IPSS-M](#fire-compute-ipss-m)
-  - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
-  - [🎯 Annotating batch from CSV/Excel file](#dart-annotating-batch-from-csvexcel-file)
-  - [🦾 Using the command line interface](#mechanical_arm-using-the-command-line-interface-cli)
+- [🚀 API Usage](#rocket-api-usage)
+- [👾 CLI Usage](#alien-cli-usage)
+  - [🔥 Using it as a node/javascript package](#fire-using-it-as-a-nodejavascript-package)
+    - [💥 IPSS-M](#boom-ipss-m)
+    - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
+    - [🎯 Annotating batch from CSV/Excel file](#dart-annotating-batch-from-csvexcel-file)
 - [🗒️ Input Variables Definition](#spiral_notepad-input-variables-definition)
 - [❓ Question](#question-question)
 
@@ -31,19 +33,147 @@ API and CLI of the Molecular International Prognostic Scoring System (IPSS-M) fo
 
 ## :page_with_curl: IPSS-M Publication
 
-[Bernard E, Tuechler H, Greenberg PL, Hasserjian RP, Arango Ossa JE et al. **Molecular International Prognostic Scoring System for Myelodysplastic Syndromes**, *NEJM Evidence* 2022.](https://evidence.nejm.org/doi/full/10.1056/EVIDoa2200008)
+>**Bernard E**, Tuechler H, Greenberg PL, Hasserjian RP, Arango Ossa JE et al. **Molecular International Prognostic Scoring System for Myelodysplastic Syndromes**, *NEJM Evidence* 2022.
 
+https://evidence.nejm.org/doi/full/10.1056/EVIDoa2200008
 
-## :rocket: Installation instructions
+## :rocket: API Usage
+
+The API is available at: https://api.mds-risk-model.com
+
+- **IPSS-M endpoint:** `/ipssm`
 
 ```bash
-# Using npm
-npm install ipssm
+curl \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"HB": 10, "PLT":150, "BM_BLAST":2, "CYTO_IPSSR": "Poor"}' \
+    https://api.mds-risk-model.com/ipssm
+
+# example response
+{
+  "patient": {
+    "HB": 10,
+    "PLT": 150,
+    "BM_BLAST": 2,
+    "CYTO_IPSSR": "Poor",
+    "del5q": 0,
+    "del7_7q": 0,
+    "del17_17p": 0,
+    "complex": 0,
+    "TP53mut": "0",
+    "TP53maxvaf": 0,
+    "TP53loh": 0,
+    "MLL_PTD": 0,
+    "FLT3": 0,
+    "ASXL1": 0,
+    "CBL": 0,
+    "DNMT3A": 0,
+    "ETV6": 0,
+    "EZH2": 0,
+    "IDH2": 0,
+    "KRAS": 0,
+    "NPM1": 0,
+    "NRAS": 0,
+    "RUNX1": 0,
+    "SF3B1": 0,
+    "SRSF2": 0,
+    "U2AF1": 0,
+    "BCOR": 0,
+    "BCORL1": 0,
+    "CEBPA": 0,
+    "ETNK1": 0,
+    "GATA2": 0,
+    "GNB1": 0,
+    "IDH1": 0,
+    "NF1": 0,
+    "PHF6": 0,
+    "PPM1D": 0,
+    "PRPF8": 0,
+    "PTPN11": 0,
+    "SETBP1": 0,
+    "STAG2": 0,
+    "WT1": 0
+  },
+  "ipssm": {
+    "means": {
+      "riskScore": -0.35,
+      "riskCat": "Moderate Low"
+    },
+    "worst": {
+      "riskScore": -0.35,
+      "riskCat": "Moderate Low"
+    },
+    "best": {
+      "riskScore": -0.35,
+      "riskCat": "Moderate Low"
+    }
+ }
 ```
 
-## :boom: IPSS-M Javascript Usage
+- **IPSS-R endpoint:** `/ipssr`
 
-### :fire: Compute IPSS-M
+```bash
+$ curl \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"HB": 10, "ANC": 1.8, "PLT": 150, "BM_BLAST": 2, "CYTO_IPSSR": "Poor", "AGE": 28}' \
+    https://api.mds-risk-model.com/ipssr
+
+# example response
+{
+  "patient": {
+    "HB": 10,
+    "ANC": 1.8,
+    "PLT": 150,
+    "BM_BLAST": 2,
+    "CYTO_IPSSR": "Poor",
+    "AGE": 28
+  },
+  "ipssr": {
+    "IPSSR_SCORE": 3,
+    "IPSSR_CAT": "Low",
+    "IPSSRA_SCORE": 1.53,
+    "IPSSRA_CAT": "Low"
+  }
+}
+```
+
+## :alien: CLI Usage
+
+You can use the command line interface to annotate a file with patients, where each row is a patient and each column is a variable.
+
+```bash
+# Without installing it using npx
+npx ipssm --help
+```
+
+```bash
+# With local installation using npm
+npm install ipssm
+ipssm --help
+```
+
+```text
+$  ipssm --help
+
+Annotate a file of patients with IPSS-M and IPSS-R risk scores and categories.
+It supports .csv, .tsv, .xlsx files.
+
+Usage: ipssm <inputFile> <outputFile>
+
+Positionals:
+  inputFile   File to be annotated (rows: patients, columns: variables).[string]
+  outputFile  Path for the annotated output file.                       [string]
+
+Options:
+      --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
+```
+
+### :fire: Using it as a node/javascript package
+
+#### :boom: IPSS-M
 
 Having a patient's data in a dictionary, you can compute the IPSS-M.
 
@@ -126,7 +256,7 @@ console.log(ipssmResult)
 }
 ```
 
-### :zap: IPSS-R and IPSS-R (Age adjusted)
+#### :zap: IPSS-R and IPSS-R (Age adjusted)
 
 Additionally, you may find an implementation to compute the IPPS-R and IPSS-R (Age adjusted) in this module:
 
@@ -168,7 +298,7 @@ Which outputs a risk score (means), with a best and worst scenario risk score to
 }
 ```
 
-### :dart: Annotating batch from CSV/Excel file
+#### :dart: Annotating batch from CSV/Excel file
 
 The following code will annotate a CSV file with the IPSS-M and IPSS-M Risks.
 
@@ -192,26 +322,6 @@ const outputFile = 'IPSSMexample.annotated.xlsx'
 await annotateFile(inputFile, outputFile)
 ```
 
-### :mechanical_arm: Using the command line interface (CLI)
-
-You can use the command line interface to annotate a file with patients, where each row is a patient and each column is a variable.
-
-```text
-$  ipssm --help
-
-Annotate a file of patients with IPSS-M and IPSS-R risk scores and categories.
-It supports .csv, .tsv, .xlsx files.
-
-Usage: ipssm <inputFile> <outputFile>
-
-Positionals:
-  inputFile   File to be annotated (rows: patients, columns: variables).[string]
-  outputFile  Path for the annotated output file.                       [string]
-
-Options:
-      --version  Show version number                                   [boolean]
-  -h, --help     Show help                                             [boolean]
-```
 
 <!-- Anchor to target cli help -->
 <span id="inputs" />
