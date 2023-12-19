@@ -143,3 +143,18 @@ export interface BetaRiskScore {
 export interface CsvData {
   [key: string]: number | string
 }
+
+export interface FieldDefinition {
+  label: string;
+  category: string;
+  type: string;
+  required: boolean;
+  default?: number | string;
+  varName:string;
+  units?: string;
+  min?: number;
+  max?: number;
+  values?: any[];
+  notes?: string;
+  allowNull?: boolean;
+}

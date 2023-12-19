@@ -4,9 +4,18 @@ import { computeIpssm, computeIpssr as ipssr } from './utils/risk'
 import { parseCsv, parseXlsx, writeCsv, writeXlsx } from './utils/parseFile'
 
 // IPSS-M risk score method
-const ipssm = (patientInput: PatientInput): IpssmScores => {
+const ipssm = (patientInput: PatientInput, contributions: boolean=false): IpssmScores => {
   const processed = processInputs(patientInput)
-  return computeIpssm(processed)
+  const result = computeIpssm(processed)
+  if (!contributions) {
+    // @ts-ignore
+    delete result.means.contributions
+    // @ts-ignore
+    delete result.best.contributions
+    // @ts-ignore
+    delete result.worst.contributions
+  } 
+  return result
 }
 
 // IPSS-M, IPSS-R, and IPSS-RA risks score from a csv/xlsx file method

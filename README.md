@@ -7,9 +7,9 @@
 
 <!-- badges: end -->
 
-# ipssm (js)
+# ipssm API and CLI
 
-Javascript/Node Package for the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.
+API and CLI of the Molecular International Prognostic Scoring System (IPSS-M) for Myelodysplastic Syndromes.
 
 - For the R package, see [papaemmelab/ipssm](https://github.com/papaemmelab/ipssm).
 
@@ -19,11 +19,11 @@ Javascript/Node Package for the Molecular International Prognostic Scoring Syste
 
 - [📖 IPSS-M Publication](#page_with_curl-ipss-m-publication)
 - [🚀 Installation instructions](#rocket-installation-instructions)
-- [💥 IPSS-M Usage](#boom-ipss-m-usage)
+- [💥 IPSS-M Usage](#boom-ipss-m-javascript-usage)
   - [🔥 Compute IPSS-M](#fire-compute-ipss-m)
   - [⚡️ IPSS-R and IPSS-R (Age adjusted)](#zap-ipss-r-and-ipss-r-age-adjusted)
   - [🎯 Annotating batch from CSV/Excel file](#dart-annotating-batch-from-csvexcel-file)
-  - [🦾 Using the command line interface](#mechanical_arm-using-the-command-line-interface)
+  - [🦾 Using the command line interface](#mechanical_arm-using-the-command-line-interface-cli)
 - [🗒️ Input Variables Definition](#spiral_notepad-input-variables-definition)
 - [❓ Question](#question-question)
 
@@ -41,7 +41,7 @@ Javascript/Node Package for the Molecular International Prognostic Scoring Syste
 npm install ipssm
 ```
 
-## :boom: IPSS-M Usage
+## :boom: IPSS-M Javascript Usage
 
 ### :fire: Compute IPSS-M
 
@@ -192,7 +192,7 @@ const outputFile = 'IPSSMexample.annotated.xlsx'
 await annotateFile(inputFile, outputFile)
 ```
 
-### :mechanical_arm: Using the command line interface
+### :mechanical_arm: Using the command line interface (CLI)
 
 You can use the command line interface to annotate a file with patients, where each row is a patient and each column is a variable.
 
@@ -217,8 +217,6 @@ Options:
 <span id="inputs" />
 
 ## :spiral_notepad: Input Variables Definition
-
-
 
 | Category                   | Variable Explanation          | Variable     | Unit                         | Possible Value                                              |
 |----------------------------|-------------------------------|--------------|------------------------------|-------------------------------------------------------------|
