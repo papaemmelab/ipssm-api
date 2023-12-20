@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
 import path from 'path'
+import fs from 'fs'
 import { annotateFile, ipssm, ipssr } from './index'
-import { validatePatientForIpssm, validatePatientForIpssr } from './utils/validation'
+import { validatePatientForIpssm, validatePatientForIpssr, validateAnnotateFile } from './utils/validation'
 import serverless from 'serverless-http'
 import multer from 'multer'
-import fs from 'fs'
 
 const app = express()
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
@@ -72,8 +72,7 @@ app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) 
 const upload = multer({ dest: 'uploads/' })
 
 // Endpoint for annotating a tsv/xlsx file
-app.post('/annotateFile', upload.single('file'), async (req: Request, res: Response) => {
-  console.log(`Output File format: ${req.body.outputFormat}`)
+app.post('/annotateFile', validateAnnotateFile, upload.single('file'), async (req: Request, res: Response) => {
   const outputFilePath: string = `uploads/Annotated.IPSSM.${req.body.outputFormat as string || 'csv'}`
   try {
     if (req.file) {
