@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express'
 import path from 'path'
+import fs from 'fs'
 import { annotateFile, ipssm, ipssr } from './index'
-import { validatePatientForIpssm, validatePatientForIpssr } from './utils/validation'
+import { validatePatientForIpssm, validatePatientForIpssr, validateAnnotateFile } from './utils/validation'
 import serverless from 'serverless-http'
+import multer from 'multer'
 
 const app = express()
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
@@ -18,8 +20,8 @@ app.use((req, _res, next) => {
 
 // Serve the redoc swagger documentation
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'redoc-static.html'));
-});
+  res.sendFile(path.join(__dirname, '..', 'redoc-static.html'))
+})
 
 // Endpoint for Ipssm
 app.post('/ipssm', validatePatientForIpssm, async (req: Request, res: Response) => {
@@ -66,15 +68,31 @@ app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) 
   }
 })
 
+// Set up multer to store uploaded files in memory
+const upload = multer({ dest: 'uploads/' })
+
 // Endpoint for annotating a tsv/xlsx file
-app.get('/annotateFile', async (req: Request, res: Response) => {
-  const inputFile: string = req.query.inputFile as string
-  const outputFile: string = req.query.outputFile as string
-  
+app.post('/annotateFile', validateAnnotateFile, upload.single('file'), async (req: Request, res: Response) => {
+  const outputFilePath: string = `uploads/Annotated.IPSSM.${req.body.outputFormat as string || 'csv'}`
   try {
-    await annotateFile(inputFile, outputFile)
-    res.send('File annotated successfully.')
+    if (req.file) {
+      const originalFilename = req.file.originalname
+      const originalExtension = path.extname(originalFilename)
+      const inputFilePath = req.file.path + originalExtension
+
+      // Rename the uploaded file to include the original extension
+      fs.renameSync(req.file.path, inputFilePath)
+
+      await annotateFile(inputFilePath, outputFilePath)
+      const outputFileContent = fs.readFileSync(outputFilePath, 'utf8')
+
+      // Send the file content as the response
+      res.send(outputFileContent)
+    } else {
+      throw new Error('No file uploaded.')
+    }
   } catch (error) {
+    console.log((error as Error).stack)
     res.status(500).send('An error occurred while annotating the file.')
   }
 })

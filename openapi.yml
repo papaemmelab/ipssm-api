@@ -47,6 +47,31 @@ paths:
                 $ref: '#/components/schemas/IpssrResponse'
         '500':
           description: An error occurred while calculating IPSS-R risk score
+  /annotateFile:
+    post:
+      summary: Annotate a file with patients, with IPSS-M and IPSS-R risk scores.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: csv/tsv or excel file to be annotated. One patient per row.
+      responses:
+        '200':
+          description: Successful operation. Stream the annotated file as CSV.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '500':
+          description: An error occurred while annotating the file.
 components:
   schemas:
     Clinical:

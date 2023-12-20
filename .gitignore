@@ -10,3 +10,6 @@ test.csv
 
 # Serverless artifacts
 .serverless
+
+# API uploads
+uploads

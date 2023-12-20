@@ -44,8 +44,16 @@ const buildSchema = (ipssrFields: FieldDefinition[]) => {
 
   return schema
 }
+
+// Endpoint Schemas
 const patientForIpssrSchema = buildSchema(ipssrFields)
 const patientForIpssmSchema = buildSchema(ipssmFields)
+const annotateFileSchema = Joi.object({
+  file: Joi.custom((value, helpers) => {
+    return value && value.mimetype && value.mimetype.startsWith('text/') ? value : helpers.error('file.invalid')
+  }, 'File validation'),
+  outputFormat: Joi.string().valid('csv', 'tsv', 'xlsx').default('csv')
+})
 
 
 // Middlewares to handle validation errors
@@ -78,5 +86,10 @@ export const validatePatientForIpssr = (req: Request, res: Response, next: NextF
 export const validatePatientForIpssm = (req: Request, res: Response, next: NextFunction) => {
   const { value, error } = patientForIpssmSchema.validate(req.body, { abortEarly: false })
   req.body = value
+  handleResponse(error, res, next)
+}
+
+export const validateAnnotateFile = (req: Request, res: Response, next: NextFunction) => {
+  const { value, error } = annotateFileSchema.validate(req.body, { abortEarly: false })
   handleResponse(error, res, next)
 }
