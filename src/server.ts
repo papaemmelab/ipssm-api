@@ -69,11 +69,11 @@ app.post('/ipssr', validatePatientForIpssr, async (req: Request, res: Response) 
 })
 
 // Set up multer to store uploaded files in memory
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: '/tmp/uploads/' })
 
 // Endpoint for annotating a tsv/xlsx file
 app.post('/annotateFile', validateAnnotateFile, upload.single('file'), async (req: Request, res: Response) => {
-  const outputFilePath: string = `uploads/Annotated.IPSSM.${req.body.outputFormat as string || 'csv'}`
+  const outputFilePath: string = `/tmp/uploads/Annotated.IPSSM.${req.body.outputFormat as string || 'csv'}`
   try {
     if (req.file) {
       const originalFilename = req.file.originalname
