@@ -212,7 +212,7 @@ genes.forEach((gene) => {
     values: [    
       0,
       1,
-      'N/A',
+      'NA',
     ],
   }
 })
