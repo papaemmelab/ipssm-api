@@ -322,11 +322,16 @@ const outputFile = 'IPSSMexample.annotated.xlsx'
 await annotateFile(inputFile, outputFile)
 ```
 
-
 <!-- Anchor to target cli help -->
 <span id="inputs" />
 
 ## :spiral_notepad: Input Variables Definition
+
+Note: Values for mutations:
+
+- `0` means wild-type (non-mutated)
+- `1` means mutated, and
+- `NA` means 'Not Asssesed'.
 
 | Category                   | Variable Explanation          | Variable     | Unit                         | Possible Value                                              |
 |----------------------------|-------------------------------|--------------|------------------------------|-------------------------------------------------------------|
@@ -377,3 +382,16 @@ await annotateFile(inputFile, outputFile)
 ## :question: Question
 
 Any questions feel free to add an [issue](https://github.com/papaemmelab/ipssm-js/issues) to this repo or to contact [ElsaB](https://elsab.github.io/).
+
+## :code: Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run the development server
+npm run serve
+
+# Run tests
+npm test
+```
