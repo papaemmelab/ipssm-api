@@ -2,7 +2,6 @@ import { PatientInput } from '../types.js'
 import betas from './betasRiskScore.js'
 import { genesRes } from './genes.js'
 
-
 /**
  * Calculate the residual genes weigth contribution to the IPPS-M score with missing values.
  * @param {(number | string)[]} patientRes
@@ -10,9 +9,12 @@ import { genesRes } from './genes.js'
  * @param {number} nRef
  *     number of residual mutated from the reference patient (eg. average)
  * @return {{ nResMean: number, nResWorst: number, nResBest: number }}
- *     The"generalized" number of mutated genes from residual list
+ *     The 'generalized' number of mutated genes from residual list
  */
-const calculateNResMissing = (patientRes: {[key: string]: string}, nRef: number = 0.388) => {
+const calculateNResMissing = (
+  patientRes: { [key: string]: string },
+  nRef: number = 0.388
+) => {
   // Number of missing genes
   const M = Object.values(patientRes).filter((value) => value === 'NA').length
   // Number of sequenced genes
@@ -34,7 +36,6 @@ const calculateNResMissing = (patientRes: {[key: string]: string}, nRef: number 
   return { nResMean, nResWorst, nResBest }
 }
 
-
 /**
  * Process inputs from user-based variable to model-based variables.
  * @param {Object} patientInput - user-input variables
@@ -43,46 +44,50 @@ const calculateNResMissing = (patientRes: {[key: string]: string}, nRef: number 
 const processInputs = (patientInput: PatientInput): PatientInput => {
   const processed: PatientInput = { ...patientInput }
 
-  // Construction of SF3B1 features i.e SF3B1_5q
-  processed.SF3B1_5q =
-    processed.SF3B1 !== 'NA'
-      ? Number(processed.SF3B1) === 1 &&
-        Number(processed.del5q) === 1 &&
-        Number(processed.del7_7q) === 0 &&
-        Number(processed.complex) === 0
-        ? '1'
-        : '0'
-      : Number(processed.del5q) === 0
-      ? '0'
-      : 'NA'
+  // Construction of SF3B1 features
+  processed.SF3B1_5q = 'NA'
+  if (
+    Number(processed.SF3B1) === 0 ||
+    Number(processed.del5q) === 0 ||
+    Number(processed.del7_7q) === 1 ||
+    Number(processed.complex) === 1
+  ) {
+    processed.SF3B1_5q = '0'
+  }
+  if (
+    Number(processed.SF3B1) === 1 &&
+    Number(processed.del5q) === 1 &&
+    Number(processed.del7_7q) === 0 &&
+    Number(processed.complex) === 0
+  ) {
+    processed.SF3B1_5q = '1'
+  }
 
-  processed.SF3B1_alpha =
-    processed.SF3B1 !== 'NA' &&
-    processed.SF3B1_5q !== 'NA' &&
-    processed.SRSF2 !== 'NA' &&
-    processed.STAG2 !== 'NA' &&
-    processed.BCOR !== 'NA' &&
-    processed.BCORL1 !== 'NA' &&
-    processed.RUNX1 !== 'NA' &&
-    processed.NRAS !== 'NA'
-      ? Number(processed.SF3B1) === 1 &&
-        Number(processed.SF3B1_5q) === 0 &&
-        Number(processed.SRSF2) === 0 &&
-        Number(processed.STAG2) === 0 &&
-        Number(processed.BCOR) === 0 &&
-        Number(processed.BCORL1) === 0 &&
-        Number(processed.RUNX1) === 0 &&
-        Number(processed.NRAS) === 0
-        ? '1'
-        : '0'
-      : Number(processed.SRSF2) === 1 ||
-        Number(processed.STAG2) === 1 ||
-        Number(processed.BCOR) === 1 ||
-        Number(processed.BCORL1) === 1 ||
-        Number(processed.RUNX1) === 1 ||
-        Number(processed.NRAS) === 1
-      ? '1'
-      : 'NA'
+  processed.SF3B1_alpha = 'NA'
+  if (
+    Number(processed.SF3B1) === 0 ||
+    Number(processed.SF3B1_5q) === 1 ||
+    Number(processed.SRSF2) === 1 ||
+    Number(processed.STAG2) === 1 ||
+    Number(processed.BCOR) === 1 ||
+    Number(processed.BCORL1) === 1 ||
+    Number(processed.RUNX1) === 1 ||
+    Number(processed.NRAS) === 1
+  ) {
+    processed.SF3B1_alpha = '0'
+  }
+  if (
+    Number(processed.SF3B1) === 1 &&
+    Number(processed.SF3B1_5q) === 0 &&
+    Number(processed.SRSF2) === 0 &&
+    Number(processed.STAG2) === 0 &&
+    Number(processed.BCOR) === 0 &&
+    Number(processed.BCORL1) === 0 &&
+    Number(processed.RUNX1) === 0 &&
+    Number(processed.NRAS) === 0
+  ) {
+    processed.SF3B1_alpha = '1'
+  }
 
   // Construction of TP53multi feature
   processed.TP53loh =
@@ -99,9 +104,9 @@ const processInputs = (patientInput: PatientInput): PatientInput => {
       ? '0'
       : processed.TP53mut === '2 or more'
       ? '1'
-      : (processed.TP53mut === '1') && (processed.TP53loh === '1')
+      : processed.TP53mut === '1' && processed.TP53loh === '1'
       ? '1'
-      : (processed.TP53mut === '1') && (processed.TP53loh === '0')
+      : processed.TP53mut === '1' && processed.TP53loh === '0'
       ? '0'
       : 'NA'
 
@@ -120,7 +125,7 @@ const processInputs = (patientInput: PatientInput): PatientInput => {
   }[processed.CYTO_IPSSR]
 
   // Calculate number of residual mutations Nres2 allowing missing genes in the list
-  const processedResGenes: {[key: string]: string} = Object.fromEntries(
+  const processedResGenes: { [key: string]: string } = Object.fromEntries(
     Object.entries(processed).filter(([key, _]) => genesRes.includes(key))
   )
   const nRes2Means = betas.find((i) => i.name === 'Nres2')?.means

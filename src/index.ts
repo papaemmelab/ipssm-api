@@ -1,4 +1,4 @@
-import { PatientInput, PatientOutput, IpssmScores, PatientForIpssr, CsvData } from './types'
+import { PatientInput, PatientOutput, IpssmScores, PatientForIpssr } from './types'
 import { processInputs } from './utils/preprocess'
 import { computeIpssm, computeIpssr as ipssr } from './utils/risk'
 import { parseCsv, parseXlsx, writeCsv, writeXlsx } from './utils/parseFile'

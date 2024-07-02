@@ -39,7 +39,6 @@ const runRiskOnPatients = (patients) => {
 }
 
 describe('File Parsing', () => {
-
   it('Parses data from csv file and computes score', async () => {
     const csv = './test/data/IPSSMexample.csv'
     const dataCsv = await parseCsv(csv)
@@ -51,7 +50,6 @@ describe('File Parsing', () => {
     const dataXlsx = await parseXlsx(xlsx)
     runRiskOnPatients(dataXlsx)
   })
-  
 })
 
     
