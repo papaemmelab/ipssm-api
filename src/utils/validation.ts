@@ -23,22 +23,28 @@ const buildSchema = (ipssrFields: FieldDefinition[]) => {
           break
       default:
           throw new Error(`Unsupported field type: ${field.type}`)
-      }
+    }
 
-      fieldSchema = fieldSchema.messages({
-        'number.base': `'${field.label}' must be a number.`,
-        'number.min': `'${field.label}' must be greater than or equal to ${field.min}${field.units}`,
-        'number.max': `'${field.label}' must be less than or equal to ${field.max}${field.units}`,
-        'any.required': `'${field.label}' is required`,
-        'any.only': `'${field.label}' must be one of: ${field.values?.join(', ')}.`,
-        'string.base': `'${field.label}' must be a string`,
+    fieldSchema = fieldSchema.messages({
+      'number.base': `'${field.label}' must be a number.`,
+      'number.min': `'${field.label}' must be greater than or equal to ${field.min}${field.units}`,
+      'number.max': `'${field.label}' must be less than or equal to ${field.max}${field.units}`,
+      'any.required': `'${field.label}' is required`,
+      'any.only': `'${field.label}' must be one of: ${field.values?.join(', ')}.`,
+      'string.base': `'${field.label}' must be a string`,
+    })
+
+    if (field.varName === 'TP53maxvaf') {
+      // Custom for Tp53maxvaf
+      fieldSchema = fieldSchema.when('TP53mut', {
+        is: Joi.exist().valid('1', '2 or more'),
+        then: Joi.required()
       })
-      
-      if (field.required) {
-        fieldSchema = fieldSchema.required()
-      } else if ('default' in field) {
-        fieldSchema = fieldSchema.default(field.default)
-      }
+    } else if (field.required) {
+      fieldSchema = fieldSchema.required()
+    } else if ('default' in field) {
+      fieldSchema = fieldSchema.default(field.default)
+    }
     return schemaAcc.keys({ [field.varName]: fieldSchema })
   }, Joi.object({}))
 
