@@ -7,6 +7,9 @@
 
 <!-- badges: end -->
 
+> [!important]
+> **You may use `IPSS-M API`, the underlying content, and any output therefrom for personal for academic and research and noncommercial purposes only. See [LICENSE](LICENSE) for more details.**
+
 # ipssm API and CLI
 
 ⚡️ API Reference Available at: https://api.mds-risk-model.com
